@@ -127,7 +127,6 @@ CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
 if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
     STATIC_URL = '/declanyg/static/'
     MEDIA_URL = '/declanyg/media/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'declanyg', 'static')
 
 
 # Default primary key field type
