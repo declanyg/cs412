@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Sun Tzu Quote of the Day</title>
+        <link rel="stylesheet" href="{% static 'styles_grid.css' %}">
+    </head>
+
+    <body>
+        <div class="grid-container">
+        <header>
+            <h1>Sun Tzu Quote of the Day</h1>
+        </header>
+        
+        <nav>
+            <li><a href="{% url 'quotes:quote' %}">Quote of the Day</a></li>    
+            <li><a href="{% url 'quotes:show_all' %}">Show All</a></li>   
+            <li><a href="{% url 'quotes:about' %}">About</a></li>    
+        </nav>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <aside>
+        <p></p>
+    </aside>
+
+    <footer>
+        <p>
+            Page created by declanyg@bu.edu.<br>
+            Generated at: {{ generated_time }}<br>
+        </p>
+
+    </footer>
+
+</body>
+</html>
