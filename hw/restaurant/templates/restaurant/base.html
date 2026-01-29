@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>The Banana Store</title>
+        <link rel="stylesheet" href="{% static 'restaurant/styles_grid.css' %}">
+    </head>
+
+    <body>
+        <div class="grid-container">
+        <header>
+            <h1>The Banana Store</h1>
+        </header>
+        
+        <nav>
+            <li><a href="{% url 'restaurant:main' %}">Main</a></li>    
+            <li><a href="{% url 'restaurant:order' %}">Order</a></li>   
+            <li><a href="{% url 'restaurant:confirmation' %}">Confirmation</a></li>    
+        </nav>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <aside>
+        <p></p>
+    </aside>
+
+    <footer>
+        <p>
+            Page created by declanyg@bu.edu.<br>
+            Generated at: {{ generated_time }}<br>
+        </p>
+
+    </footer>
+
+</body>
+</html>
