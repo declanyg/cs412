@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import random
 import time
+import datetime
 
 # Create your views here.
 from django.http import HttpResponse
@@ -15,8 +16,19 @@ def main(request):
     return render(request, "restaurant/main.html", context)
 
 def order(request):
+    weekday = datetime.datetime.today().weekday()
+    daily_specials = [
+        "Banana Split $3.00",
+        "Banana Pancake $2.75",
+        "Banana Oatmeal Cookie $2.50",
+        "Banana Muffin $2.25",
+        "Fried Bananas $2.00",
+        "Banana Pudding $3.50",
+        "Banana Foster $4.00"
+    ]
 
     context = {
+        "daily_special": daily_specials[weekday],
         "generated_time": time.ctime()
     }
 

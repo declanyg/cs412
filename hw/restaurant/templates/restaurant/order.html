@@ -4,4 +4,38 @@
 
 {% block content %}
 <h3>Place Your Order</h3>
+<form action="/restaurant/confirmation/" method="post">
+    {% csrf_token %}
+    <label for="item">Select Items:</label>
+    <br/>
+    <input type="checkbox" id="Banana" name="Banana" value="Banana">
+    <label for="Banana">Banana $1.00</label><br>
+    <input type="checkbox" id="Peeled Banana" name="Peeled Banana" value="Peeled Banana">
+    <label for="Peeled Banana">Peeled Banana $1.50</label><br>
+    <input type="checkbox" id="Banana Smoothie" name="Banana Smoothie" value="Banana Smoothie">
+    <label for="Banana Smoothie">Banana Smoothie $2.00</label><br>
+    <input type="checkbox" id="Banana Bread" name="Banana Bread" value="Banana Bread">
+    <label for="Banana Bread">Banana Bread $2.50</label><br>
+    <input type="checkbox" id="Banana Cream Pie" name="Banana Cream Pie" value="Banana Cream Pie">
+    <label for="Banana Cream Pie">Banana Cream Pie $5.00</label><br>
+    <br/>
+
+    <label for="item">Daily Special:</label>
+    <br/>
+    <input type="checkbox" id="Daily Special" name="daily special" value="daily special">
+    <label for="daily Special">{{ daily_special }}</label><br>
+    <br/>
+
+    <label for="special instruction">Special Instructions:</label> 
+    <br><br>
+    <textarea type="text" id="special instruction" name="special instruction" style="width: 100%; height: 80px; font-size: 14px;"></textarea>
+    <br><br>
+
+    <label for="customer information">Customer Information:</label><br/>
+    <input type="text" id="name" name="name" value="" placeholder="Name" style="margin-top: 10px;margin-bottom: 10px;"><br/>
+    <input type="text" id="phone" name="phone" value="" placeholder="Phone Number" style="margin-bottom: 10px;"><br/>
+    <input type="text" id="email" name="email" value="" placeholder="Email" style="margin-bottom: 10px;">
+    <br><br>
+
+    <input type="submit" value="Submit Order">
 {% endblock %}
