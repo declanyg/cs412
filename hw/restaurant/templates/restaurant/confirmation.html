@@ -3,5 +3,29 @@
 {% block title %}Confirmation - Restaurant{% endblock %}
 
 {% block content %}
-<h3>Order Confirmation</h3>
+<div style="text-align: center;">
+    <h2>Thank you for your order, {{ name }}!</h2>
+
+    <img src="https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNjk3YmRiZmE2YmI4ODE5MTg2YWJkNzMyODQ3NTcwYjk6ZmlsZV8wMDAwMDAwMDUxZTQ3MjJmODdhODUzOWU4MzAzNmUxMyIsInRzIjoiMjA0ODIiLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6IjY3NDExYTY1OTFiZmY1NmFjZDc4OTIyOWU5ZTQ2MjdjOGM4MjA1MzRjNjFjYzA5MTMwMmIwYWQ5NjFjODliZTciLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY3AiOm51bGwsIm1hIjpudWxsfQ==" alt="Thank You" style="width:300px;height:auto;"/>
+
+    <h3>Total: ${{ total }}</h3>
+
+    <p>Phone: {{ phone }}</p>
+    <p>Email: {{ email }}</p>
+
+    <h3>Items Ordered:</h3>
+    {% if items %}
+    <ul>
+        {% for item in items %}
+        <li>{{ item }}</li>
+        {% endfor %}
+        <li>Total: ${{ total }}</li>
+    </ul>
+    {% else %}
+    <p>No items selected.</p>
+    {% endif %}
+
+    <p>Special Instructions: {{ special_instructions }}</p>
+
+</div>
 {% endblock %}
