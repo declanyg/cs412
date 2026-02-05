@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Mini Insta</title>
+        <link rel="stylesheet" href="{% static 'mini_insta/styles_grid.css' %}">
+    </head>
+
+    <body>
+        <div class="grid-container">
+        <header>
+            <h1>Mini Insta</h1>
+        </header>
+        
+        <nav>
+            <li><a href="{% url 'mini_insta:index' %}">Home</a></li>    
+            <li><a href="{% url 'mini_insta:show_all_profiles' %}">Show All Profiles</a></li>   
+        </nav>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <aside>
+        <p></p>
+    </aside>
+
+    <footer>
+        <p>
+            Page created by declanyg@bu.edu.<br>
+            Generated at: {{ generated_time }}<br>
+        </p>
+
+    </footer>
+
+</body>
+</html>
