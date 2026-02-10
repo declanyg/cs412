@@ -5,6 +5,6 @@ from . import views
 app_name = 'mini_insta' 
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path('show_all_profiles/', views.show_all_profiles, name='show_all_profiles'),
+    path("", views.ProfileListView.as_view(), name="show_all_profiles"),
+    path('profile_list/', views.show_profile, name='profile_list'),
 ]

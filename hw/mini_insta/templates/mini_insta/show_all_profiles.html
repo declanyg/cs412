@@ -3,5 +3,26 @@
 {% block title %}Show All Profiles - Mini Insta{% endblock %}
 
 {% block content %}
-Show All Profiles
+
+<ul class="profile-list">
+  {% for profile in profiles %}
+    <li class="profile-item">
+      <img
+        src="{{ profile.profile_image_url }}"
+        alt="{{ profile.username }}"
+        class="profile-img"
+        draggable="false"
+      >
+
+      <div class="profile-text">
+        <strong>{{ profile.display_name }}</strong>
+        <span class="username">{{ profile.username }}</span>
+      </div>
+    </li>
+  {% empty %}
+    <li>No profiles found.</li>
+  {% endfor %}
+</ul>
+
+
 {% endblock %}

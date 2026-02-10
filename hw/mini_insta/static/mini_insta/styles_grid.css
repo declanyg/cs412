@@ -136,3 +136,35 @@ footer {
     }
 
 }
+
+/* show_all_profiles */
+.profile-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.profile-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.username {
+  color: #666;
+  font-size: 0.9em;
+}
