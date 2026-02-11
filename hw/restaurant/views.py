@@ -32,14 +32,13 @@ prices = {
 def main(request):
 
     context = {
-        "image_source": "https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNjk3Yjk0MDkyMjljODE5MWIxODhiZTBkNDcxMzM0MGI6ZmlsZV8wMDAwMDAwMDIwZTQ3MWY4ODVmOWFhYTU2M2UxMjM5OCIsInRzIjoiMjA0ODIiLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6IjI4ZmQ0N2E2NDg3NzZkMTJlMjkyYmY3ZGQzYjkzMTM2ZDcwM2FmYWFhMTY4ODc2YjVkZWMzMTNiMmJhZWNjOWQiLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY3AiOm51bGwsIm1hIjpudWxsfQ==",
+        "image_source": "https://i.postimg.cc/506C5LCq/banana-store.png",
         "generated_time": time.ctime()
     }
 
     return render(request, "restaurant/main.html", context)
 
 def order(request):
-    weekday = datetime.datetime.today().weekday()
 
     context = {
         "generated_time": time.ctime()

@@ -1,0 +1,21 @@
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Show Profile - Mini Insta{% endblock %}
+
+{% block content %}
+<div class="profile-detail">
+    <img
+        src="{{ profile.profile_image_url }}"
+        alt="{{ profile.username }}"
+        class="profile-img-detail"
+        draggable="false"
+    >
+    
+    <strong>{{ profile.display_name }}</strong>
+    <span class="username">{{ profile.username }}</span>
+    <div class="profile-text-detail">
+            <p>{{ profile.bio_text }}</p>
+        <p>Join Date: {{ profile.join_date }}</p>
+    </div>
+</div>
+{% endblock %}

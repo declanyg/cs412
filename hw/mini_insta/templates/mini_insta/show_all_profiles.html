@@ -7,12 +7,14 @@
 <ul class="profile-list">
   {% for profile in profiles %}
     <li class="profile-item">
-      <img
-        src="{{ profile.profile_image_url }}"
-        alt="{{ profile.username }}"
-        class="profile-img"
-        draggable="false"
-      >
+        <a href="{% url 'mini_insta:show_profile' profile.pk %}">
+            <img
+                src="{{ profile.profile_image_url }}"
+                alt="{{ profile.username }}"
+                class="profile-img"
+                draggable="false"
+            >
+        </a>
 
       <div class="profile-text">
         <strong>{{ profile.display_name }}</strong>

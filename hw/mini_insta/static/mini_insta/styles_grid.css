@@ -168,3 +168,25 @@ footer {
   color: #666;
   font-size: 0.9em;
 }
+
+/* show_profile */
+.profile-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-img-detail {
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-text-detail {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 1em;
+}
