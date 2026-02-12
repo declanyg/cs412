@@ -1,4 +1,7 @@
-import time
+# File: views.py
+# Author: Declan Young (declanyg@bu.edu), 3/05/2026
+# Description: views file to handle views for mini_insta app
+
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Profile

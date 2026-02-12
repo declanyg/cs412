@@ -1,3 +1,7 @@
+# File: urls.py
+# Author: Declan Young (declanyg@bu.edu), 3/05/2026
+# Description: urls file to handle routing for mini_insta app
+
 from django.urls import path
 
 from . import views
