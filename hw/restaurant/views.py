@@ -40,7 +40,10 @@ def main(request):
 
 def order(request):
 
+    weekday = datetime.datetime.today().weekday()
+    daily_special = daily_specials[weekday]
     context = {
+        "daily_special": daily_special,
         "generated_time": time.ctime()
     }
 
