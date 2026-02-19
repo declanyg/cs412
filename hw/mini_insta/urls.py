@@ -1,5 +1,5 @@
 # File: urls.py
-# Author: Declan Young (declanyg@bu.edu), 3/05/2026
+# Author: Declan Young (declanyg@bu.edu), 2/05/2026
 # Description: urls file to handle routing for mini_insta app
 
 from django.urls import path
@@ -12,4 +12,5 @@ urlpatterns = [
     path("", views.ProfileListView.as_view(), name="show_all_profiles"),
     path("profile/<int:pk>/", views.ProfileDetailView.as_view(), name="show_profile"),
     path("post/<int:pk>/", views.PostDetailView.as_view(), name="show_post"),
+    path("profile/<int:pk>/create_post/", views.CreatePostView.as_view(), name="create_post"),
 ]

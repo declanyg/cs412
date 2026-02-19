@@ -1,5 +1,5 @@
 # File: models.py
-# Author: Declan Young (declanyg@bu.edu), 3/05/2026
+# Author: Declan Young (declanyg@bu.edu), 2/05/2026
 # Description: models file to handle models for mini_insta app
 
 from django.db import models
