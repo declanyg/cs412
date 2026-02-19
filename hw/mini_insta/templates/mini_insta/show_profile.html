@@ -22,10 +22,10 @@ Description: Template to display a single profile in mini_insta app  -->
         <p>Join Date: {{ profile.join_date }}</p>
     </div>
 
-    <li style="border: 1px solid #ccc;">
+    <li>
         {% for post in profile.posts.all %}
             <a href="{% url 'mini_insta:show_post' post.pk %}">
-                <div class="post">
+                <div class="post" style="border: 1px solid #ccc; padding: 12px;">
                 <p>{{ post.caption }}</p>
                 <p>Posted on: {{ post.timestamp }}</p>
                 <div class="post-photos">
