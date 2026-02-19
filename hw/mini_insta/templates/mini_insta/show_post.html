@@ -1,0 +1,30 @@
+<!-- File: show_post.html
+Author: Declan Young (declanyg@bu.edu), 3/05/2026
+Description: Template to display a single post in mini_insta app  -->
+
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Show Post - Mini Insta{% endblock %}
+
+{% block content %}
+<div>
+    <p>{{ post.caption }}</p>
+    <p>Posted on: {{ post.timestamp }}</p>
+    {% if post.photos.exists %}
+        {% for photo in post.photos.all %}
+            <img
+                src="{{ photo.image_url }}"
+                alt="Post Photo"
+                class="post-photo"
+                draggable="false"
+            >
+        {% endfor %}
+    {% else %}
+        <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+            alt="No photo"
+            class="post-photo"
+            draggable="false">
+    {% endif %}
+</div>
+{% endblock %}

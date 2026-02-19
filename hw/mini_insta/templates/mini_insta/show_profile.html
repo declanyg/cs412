@@ -21,5 +21,32 @@ Description: Template to display a single profile in mini_insta app  -->
             <p>{{ profile.bio_text }}</p>
         <p>Join Date: {{ profile.join_date }}</p>
     </div>
+
+    <li style="border: 1px solid #ccc;">
+        {% for post in profile.posts.all %}
+            <a href="{% url 'mini_insta:show_post' post.pk %}">
+                <div class="post">
+                <p>{{ post.caption }}</p>
+                <p>Posted on: {{ post.timestamp }}</p>
+                <div class="post-photos">
+                    {% if post.photos.exists %}
+                        <img
+                            src="{{ post.photos.first.image_url }}"
+                            alt="Post Photo First"
+                            class="post-photo-first"
+                            draggable="false"
+                        >
+                    {% else %}
+                        <img
+                            src="https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                            alt="No photo"
+                            class="post-photo"
+                            draggable="false">
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+        {% endfor %} 
+    </li>
 </div>
 {% endblock %}
