@@ -17,6 +17,18 @@ class Profile(models.Model):
     
     def get_all_posts(self):
         return self.posts.all().order_by('-timestamp')
+    
+    def get_followers(self):
+        return [follow.follower_profile for follow in self.profile.all()]
+    
+    def get_num_followers(self):
+        return self.profile.count()
+    
+    def get_following(self):
+        return [follow.profile for follow in self.follower_profile.all()]
+    
+    def get_num_following(self):
+        return self.follower_profile.count()
 
 class Post(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='posts')
@@ -28,6 +40,12 @@ class Post(models.Model):
     
     def get_all_photos(self):
         return self.photos.all().order_by('-timestamp')
+
+    def get_all_comments(self):
+        return self.comments.all().order_by('-timestamp')
+    
+    def get_likes(self):
+        return self.likes.all().order_by('-timestamp')
 
 class Photo(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='photos')
@@ -42,3 +60,28 @@ class Photo(models.Model):
         if self.image_url:
             return self.image_url
         return self.image_file.url
+
+class Follow(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile')
+    follower_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='follower_profile')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.follower_profile.username + " follows " + self.profile.username
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+
+    def __str__(self):
+        return self.profile.username + " commented on " + self.post.profile.username + "'s post on " + self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.profile.username + " liked " + self.post.profile.username + "'s post on " + self.timestamp.strftime("%Y-%m-%d %H:%M:%S")

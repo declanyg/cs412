@@ -27,6 +27,37 @@ Description: Template to display a single post in mini_insta app  -->
             class="post-photo"
             draggable="false">
     {% endif %}
+    
+    {% with post.get_likes as likes %}
+        {% if likes.count > 1 %}
+            <h4>
+                Liked by <strong>@{{ likes.first.profile.username }}</strong>
+                and <strong>{{ likes.count|add:"-1" }} others</strong> 
+            </h4>
+
+        {% elif likes.count == 1 %}
+            <h4>
+                Liked by <strong>@{{ likes.first.profile.username }}</strong>
+            </h4>
+
+        {% else %}
+            <h4>No likes yet</h4>
+        {% endif %}
+    {% endwith %}
+
+    <h4>Comments:</h4>
+    <div>
+        {% if post.comments.exists %}
+        {% for comment in post.comments.all %}
+            <div class="comment" style="border: 1px solid #ccc; padding: 8px; margin-bottom: 12px; border-radius: 2%;">
+                <p><strong>{{ comment.profile.display_name }} (@{{ comment.profile.username }}):</strong> {{ comment.text }}</p>
+                <p>Commented on: {{ comment.timestamp }}</p>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p>No comments</p>
+        {% endif %}
+    </div>
     <button class="update-post-button">
         <a href="{% url 'mini_insta:update_post' post.pk %}">Update</a>
     </button>
