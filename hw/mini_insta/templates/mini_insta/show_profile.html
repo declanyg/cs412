@@ -31,7 +31,7 @@ Description: Template to display a single profile in mini_insta app  -->
                 <div class="post-photos">
                     {% if post.photos.exists %}
                         <img
-                            src="{{ post.photos.first.image_url }}"
+                            src="{{ post.photos.first.get_image_url }}"
                             alt="Post Photo First"
                             class="post-photo-first"
                             draggable="false"

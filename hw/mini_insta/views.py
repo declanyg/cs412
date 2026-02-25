@@ -43,9 +43,12 @@ class CreatePostView(CreateView):
 
         post.save()
 
-        image_url = self.request.POST.get('image_url')
-        if image_url:
-            Photo.objects.create(post=post, image_url=image_url)
+        # image_url = self.request.POST.get('image_url')
+        # if image_url:
+        #     Photo.objects.create(post=post, image_url=image_url)
+        files = self.request.FILES.getlist('post-photos')
+        for file in files:
+            Photo.objects.create(post=post, image_file=file)
 
         return super().form_valid(form)
 

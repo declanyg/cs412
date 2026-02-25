@@ -13,7 +13,7 @@ Description: Template to display a single post in mini_insta app  -->
     {% if post.photos.exists %}
         {% for photo in post.photos.all %}
             <img
-                src="{{ photo.image_url }}"
+                src="{{ photo.get_image_url }}"
                 alt="Post Photo"
                 class="post-photo"
                 draggable="false"

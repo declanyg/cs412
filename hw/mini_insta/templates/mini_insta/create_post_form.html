@@ -7,10 +7,10 @@ Description: Template to create a new post in mini_insta app  -->
 {% block title %}Create Post - Mini Insta{% endblock %}
 
 {% block content %}
-<form method="post" action="{% url 'mini_insta:create_post' profile.pk %}">
+<form method="post" action="{% url 'mini_insta:create_post' profile.pk %}" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="text" name="caption" placeholder="Caption" required><br>
-    <input type="text" name="image_url" placeholder="Image URL"><br>
+    <input type="file" name="post-photos" accept="image/*" multiple><br>
     <button type="submit">Create Post</button>
     <a href="{% url 'mini_insta:show_profile' profile.pk %}" class="cancel">Cancel</a>
 </form>

@@ -31,8 +31,14 @@ class Post(models.Model):
 
 class Photo(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='photos')
-    image_url = models.URLField()
+    image_url = models.URLField(blank=True)
+    image_file = models.ImageField(upload_to="mini_insta/", blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.post.profile.username + " - " + self.image_url
+        return self.post.profile.username + " - " + (self.image_url if self.image_url else self.image_file.url)
+    
+    def get_image_url(self):
+        if self.image_url:
+            return self.image_url
+        return self.image_file.url

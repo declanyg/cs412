@@ -16,10 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.static import serve
+from django.conf import settings
 
 urlpatterns = [
     path("quotes/", include("hw.quotes.urls")),
     path("restaurant/", include("hw.restaurant.urls")),
     path("mini_insta/", include("hw.mini_insta.urls")),
     path("admin/", admin.site.urls),
+    path("media/<path:path>",serve, {"document_root": settings.MEDIA_ROOT}),
 ]
+
