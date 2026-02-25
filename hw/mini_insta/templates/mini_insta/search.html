@@ -1,0 +1,14 @@
+<!-- File: search.html
+Author: Declan Young (declanyg@bu.edu), 2/25/2026
+Description: Template to display search results form for profiles and posts in mini_insta app  -->
+
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Search - Mini Insta{% endblock %}
+{% block content %}
+<form method="get" action="{% url 'mini_insta:search_results' pk=profile.pk %}" style="gap: 12px; display: flex; flex-direction: column;">
+    <label>Search for text, tags, or people</label><br/>
+    <input type="text" name="q" placeholder="Search..." style="height: 64px;"><br/>
+    <button type="submit">Search</button>
+</form>
+{% endblock %}

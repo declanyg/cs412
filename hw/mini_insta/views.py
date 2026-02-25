@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Profile, Post, Photo
+from django.db.models import Q
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -123,5 +124,40 @@ class PostFeedListView(ListView):
         context = super().get_context_data(**kwargs)
 
         context["profile"] = Profile.objects.get(pk=self.kwargs["pk"])
+
+        return context
+
+class SearchView(ListView):
+    model = Profile
+    template_name = "mini_insta/search_results.html"
+    context_object_name = "profiles"
+
+    def dispatch(self, request, *args, **kwargs):
+        query = self.request.GET.get("q")
+        if not query:
+            self.template_name = "mini_insta/search.html"
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        if query:
+            return Post.objects.filter(caption__icontains=query).order_by('-timestamp')
+
+        return Profile.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["profile"] = Profile.objects.get(pk=self.kwargs["pk"])
+
+        context["query"] = self.request.GET.get("q", "")
+
+        context["posts"] = self.get_queryset()
+
+        context["profiles"] = Profile.objects.filter(
+            Q(username__icontains=context["query"]) |
+            Q(display_name__icontains=context["query"]) |
+            Q(bio_text__icontains=context["query"])
+        ).order_by("username")
 
         return context

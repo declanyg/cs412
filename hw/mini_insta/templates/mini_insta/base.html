@@ -37,6 +37,7 @@ Description: Base template for mini_insta app  -->
         <nav>
             </li>
             {% if profile %}
+                <li><a href="{% url 'mini_insta:search_results' profile.pk %}">Search</a></li>
                 <li><a href="{% url 'mini_insta:create_post' profile.pk %}">Create Post</a></li>
                 <li><a href="{% url 'mini_insta:show_feed' profile.pk %}">Home Feed</a></li>
             {% else %}
