@@ -1,0 +1,79 @@
+<!-- File: show_feed.html
+Author: Declan Young (declanyg@bu.edu), 2/25/2026
+Description: Template to display a feed for a specific profile in mini_insta app  -->
+
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Show Profile - Mini Insta{% endblock %}
+
+{% block content %}
+<ul class="profile-list">
+  {% for post in posts %}
+    <li class="profile-item">
+        <a href="{% url 'mini_insta:show_profile' post.profile.pk %}">
+            <img
+                src="{{ post.profile.profile_image_url }}"
+                alt="{{ post.profile.username }}"
+                class="profile-img"
+                draggable="false"
+            >
+        </a>
+
+      <div class="profile-text">
+        <strong>@{{ post.profile.username }}</strong>
+        <span class="username">{{ post.timestamp }}</span>
+      </div>
+    </li>
+  <div>
+    <p>{{ post.caption }}</p>
+    {% if post.photos.exists %}
+        <img
+            src="{{ post.photos.first.get_image_url }}"
+            alt="Post Photo"
+            class="post-photo"
+            draggable="false"
+        >
+    {% else %}
+        <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+            alt="No photo"
+            class="post-photo"
+            draggable="false">
+    {% endif %}
+    
+    {% with post.get_likes as likes %}
+        {% if likes.count > 1 %}
+            <h4>
+                Liked by <strong>@{{ likes.first.profile.username }}</strong>
+                and <strong>{{ likes.count|add:"-1" }} others</strong> 
+            </h4>
+
+        {% elif likes.count == 1 %}
+            <h4>
+                Liked by <strong>@{{ likes.first.profile.username }}</strong>
+            </h4>
+
+        {% else %}
+            <h4>No likes yet</h4>
+        {% endif %}
+    {% endwith %}
+
+    <h4>Comments:</h4>
+    <div>
+        {% if post.comments.exists %}
+        {% for comment in post.comments.all %}
+            <div class="comment" style="border: 1px solid #ccc; padding: 8px; margin-bottom: 12px; border-radius: 2%;">
+                <p><strong>{{ comment.profile.display_name }} (@{{ comment.profile.username }}):</strong> {{ comment.text }}</p>
+                <p>Commented on: {{ comment.timestamp }}</p>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p>No comments</p>
+        {% endif %}
+    </div>
+  </div>
+  {% empty %}
+    <li>No posts found.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

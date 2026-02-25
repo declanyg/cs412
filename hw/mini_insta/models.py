@@ -30,6 +30,10 @@ class Profile(models.Model):
     def get_num_following(self):
         return self.follower_profile.count()
 
+    def get_post_feed(self):
+        following_profiles = self.get_following()
+        return Post.objects.filter(profile__in=following_profiles).order_by('-timestamp')
+
 class Post(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='posts')
     timestamp = models.DateTimeField(auto_now_add=True)
