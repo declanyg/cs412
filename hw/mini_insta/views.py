@@ -4,7 +4,7 @@
 
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Profile, Post, Photo
 
 # Create your views here.
@@ -54,3 +54,11 @@ class CreatePostView(CreateView):
 
     def get_success_url(self):
         return reverse('mini_insta:show_post', kwargs={'pk': self.object.pk})
+
+class UpdateProfileView(UpdateView):
+    model = Profile
+    fields = ['display_name', 'profile_image_url', 'bio_text']
+    template_name = "mini_insta/update_profile_form.html"
+
+    def get_success_url(self):
+        return reverse('mini_insta:show_profile', kwargs={'pk': self.object.pk})

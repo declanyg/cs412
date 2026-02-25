@@ -1,0 +1,18 @@
+<!-- File: update_profile_form.html
+Author: Declan Young (declanyg@bu.edu), 2/24/2026
+Description: Template to update a profile in mini_insta app  -->
+
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Update Profile - Mini Insta{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'mini_insta:update_profile' profile.pk %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div style="width: 30%;">
+        {{ form.as_p }}
+    </div>
+    <button type="submit">Update Profile</button>
+    <a href="{% url 'mini_insta:show_profile' profile.pk %}" class="cancel">Cancel</a>
+</form>
+{% endblock %}

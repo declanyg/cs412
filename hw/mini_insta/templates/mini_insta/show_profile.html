@@ -22,6 +22,10 @@ Description: Template to display a single profile in mini_insta app  -->
         <p>Join Date: {{ profile.join_date }}</p>
     </div>
 
+    <button class="edit-profile-button">
+        <a href="{% url 'mini_insta:update_profile' profile.pk %}">Edit Profile</a>
+    </button>
+
     <li>
         {% for post in profile.posts.all %}
             <a href="{% url 'mini_insta:show_post' post.pk %}">
