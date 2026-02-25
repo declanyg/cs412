@@ -27,5 +27,11 @@ Description: Template to display a single post in mini_insta app  -->
             class="post-photo"
             draggable="false">
     {% endif %}
+    <button class="update-post-button">
+        <a href="{% url 'mini_insta:update_post' post.pk %}">Update</a>
+    </button>
+    <button class="delete-post-button">
+        <a href="{% url 'mini_insta:delete_post' post.pk %}">Delete</a>
+    </button>
 </div>
 {% endblock %}

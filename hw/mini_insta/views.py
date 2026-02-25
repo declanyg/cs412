@@ -4,7 +4,7 @@
 
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Profile, Post, Photo
 
 # Create your views here.
@@ -62,3 +62,40 @@ class UpdateProfileView(UpdateView):
 
     def get_success_url(self):
         return reverse('mini_insta:show_profile', kwargs={'pk': self.object.pk})
+
+class DeletePostView(DeleteView):
+    model = Post
+    template_name = "mini_insta/delete_post_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        post = Post.objects.get(pk=self.kwargs['pk'])
+        context['post'] = post
+
+        profile = Post.objects.get(pk=self.kwargs['pk']).profile
+        context['profile'] = profile
+
+        return context
+
+    def get_success_url(self):
+        return reverse('mini_insta:show_profile', kwargs={'pk': self.object.profile.pk})
+
+class UpdatePostView(UpdateView):
+    model = Post
+    fields = ['caption']
+    template_name = "mini_insta/update_post_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        post = Post.objects.get(pk=self.kwargs['pk'])
+        context['post'] = post
+
+        profile = Post.objects.get(pk=self.kwargs['pk']).profile
+        context['profile'] = profile
+
+        return context
+
+    def get_success_url(self):
+        return reverse('mini_insta:show_post', kwargs={'pk': self.object.pk})

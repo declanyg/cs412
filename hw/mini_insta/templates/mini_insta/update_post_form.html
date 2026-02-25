@@ -1,0 +1,23 @@
+<!-- File: update_post_form.html
+Author: Declan Young (declanyg@bu.edu), 2/24/2026
+Description: Template to update a post in mini_insta app  -->
+
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Update Post - Mini Insta{% endblock %}
+
+{% block content %}
+<div>
+    <form method="post" action="{% url 'mini_insta:update_post' post.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="width: 30%;">
+            {{ form.as_p }}
+        </div>
+        <button type="submit">Update</button>
+    </form>
+    <form method="get" action="{% url 'mini_insta:show_profile' profile.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="submit">Cancel</button>
+    </form>
+</div>
+{% endblock %}
