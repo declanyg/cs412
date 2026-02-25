@@ -8,6 +8,7 @@ Description: Template to display a single post in mini_insta app  -->
 
 {% block content %}
 <div>
+    <h3>{{ post.profile.display_name }} (@{{ post.profile.username }})</h3>
     <p>{{ post.caption }}</p>
     <p>Posted on: {{ post.timestamp }}</p>
     {% if post.photos.exists %}

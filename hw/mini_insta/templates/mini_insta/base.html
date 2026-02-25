@@ -19,6 +19,9 @@ Description: Base template for mini_insta app  -->
         
         <nav>
             <li><a href="{% url 'mini_insta:show_all_profiles' %}">Home</a></li> 
+                {% if post %}
+                    <li><a href="{% url 'mini_insta:show_profile' post.profile.pk %}">Back</a></li>
+                {% endif %}
         </nav>
     
     <main>
