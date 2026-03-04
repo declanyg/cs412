@@ -11,6 +11,7 @@ class Profile(models.Model):
     profile_image_url = models.URLField(blank=True)
     bio_text = models.TextField(blank=True)
     join_date = models.DateField(auto_now_add=True)
+    account = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='profile')
 
     def __str__(self):
         return self.username

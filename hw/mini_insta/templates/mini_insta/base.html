@@ -32,14 +32,21 @@ Description: Base template for mini_insta app  -->
 
     <footer>
         <p>
+            {% if user.is_authenticated %}
+                {{ user.username }}
+            {% else %}
+                Not logged in.
+            {% endif %} <br/>
+        </p>
+        <p>
             Page created by declanyg@bu.edu
         </p>
         <nav>
             </li>
-            {% if profile %}
-                <li><a href="{% url 'mini_insta:search_results' profile.pk %}">Search</a></li>
-                <li><a href="{% url 'mini_insta:create_post' profile.pk %}">Create Post</a></li>
-                <li><a href="{% url 'mini_insta:show_feed' profile.pk %}">Home Feed</a></li>
+            {% if user.is_authenticated and profile.account == user%}
+                <li><a href="{% url 'mini_insta:search_results' %}">Search</a></li>
+                <li><a href="{% url 'mini_insta:create_post' %}">Create Post</a></li>
+                <li><a href="{% url 'mini_insta:show_feed' %}">Home Feed</a></li>
             {% else %}
             <li><a href="{% url 'mini_insta:show_all_profiles' %}">Home</a></li>
             {% endif %}

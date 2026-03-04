@@ -32,9 +32,11 @@ Description: Template to display a single profile in mini_insta app  -->
         </button>
     </div>
 
-    <button class="edit-profile-button">
-        <a href="{% url 'mini_insta:update_profile' profile.pk %}">Edit Profile</a>
-    </button>
+    {% if user.is_authenticated and profile.account == user %}
+        <button class="edit-profile-button">
+            <a href="{% url 'mini_insta:update_profile' %}">Edit Profile</a>
+        </button>
+    {% endif %}
 
     <li>
         {% for post in profile.posts.all %}
