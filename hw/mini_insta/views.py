@@ -8,6 +8,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Profile, Post, Photo
 from django.db.models import Q
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 
 # Create your views here.
 class ProfileLoginRequiredMixin(LoginRequiredMixin):
@@ -196,3 +198,32 @@ class PersonalProfileDetailView(ProfileLoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         return self.get_profile()
+
+class CreateProfileView(CreateView):
+    model = Profile
+    fields = ['username', 'display_name', 'bio_text', 'profile_image_url']
+    template_name = "mini_insta/create_profile_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["user_registration_form"] = UserCreationForm()
+        return context
+    
+    def form_valid(self, form):
+        user_form = UserCreationForm(self.request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+
+            login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+            profile = form.save(commit=False)
+            profile.account = user
+            profile.save()
+            
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('mini_insta:show_profile')

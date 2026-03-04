@@ -35,6 +35,7 @@ Description: Base template for mini_insta app  -->
             <p>{{ user.username }}</p><br/>
         {% else %}
             <p><a href="{% url 'mini_insta:login' %}">Log in</a></p>
+            <p><a href="{% url 'mini_insta:create_profile' %}">Sign Up</a></p>
         {% endif %} <br/>
         <p>
             Page created by declanyg@bu.edu

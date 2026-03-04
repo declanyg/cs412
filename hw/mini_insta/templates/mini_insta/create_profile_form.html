@@ -1,0 +1,47 @@
+<!-- File: create_profile_form.html
+Author: Declan Young (declanyg@bu.edu), 3/4/2026
+Description: Template to create a new profile in mini_insta app  -->
+
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Create Profile - Mini Insta{% endblock %}
+
+{% block content %}
+
+<h3>Create Account & Profile</h3>
+
+<form method="post"
+      action="{% url 'mini_insta:create_profile' %}"
+      enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <!-- User Registration Form -->
+    <fieldset>
+        <legend>Account Information</legend>
+
+        {{ user_registration_form.as_p }}
+    </fieldset>
+
+    <br>
+
+    <!-- Profile Form -->
+    <fieldset>
+        <legend>Profile Information</legend>
+
+        <div style="width: 30%;">
+            {{ form.as_p }}
+        </div>
+    </fieldset>
+
+    <br>
+
+    <button type="submit">Create Account & Profile</button>
+
+    <a href="{% url 'mini_insta:show_all_profiles' %}" class="cancel">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
