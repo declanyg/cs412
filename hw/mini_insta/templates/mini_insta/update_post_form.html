@@ -8,7 +8,7 @@ Description: Template to update a post in mini_insta app  -->
 
 {% block content %}
 <div>
-    <form method="post" action="{% url 'mini_insta:update_post' %}" enctype="multipart/form-data">
+    <form method="post" action="{% url 'mini_insta:update_post' post.pk %}" enctype="multipart/form-data">
         {% csrf_token %}
         <div style="width: 30%;">
             {{ form.as_p }}
