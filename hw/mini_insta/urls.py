@@ -5,6 +5,8 @@
 from django.urls import path
 
 from . import views
+import django.contrib.auth.views as auth_views
+from django.views.generic import TemplateView
 
 app_name = 'mini_insta' 
 
@@ -24,5 +26,9 @@ urlpatterns = [
 
     path("profile/search/", views.SearchView.as_view(), name="search_results"),
 
-    path("profile", views.ProfileDetailView.as_view(), name="show_profile"),
+    path("profile/", views.PersonalProfileDetailView.as_view(), name="show_profile"),
+
+    path("login/", auth_views.LoginView.as_view(template_name='mini_insta/login.html'), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(next_page='mini_insta:logged_out'), name="logout"),
+    path("logged_out/", TemplateView.as_view(template_name='mini_insta/logged_out.html'), name="logged_out"),
 ]

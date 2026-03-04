@@ -1,0 +1,22 @@
+<!-- File: logged_out.html
+Author: Declan Young (declanyg@bu.edu), 3/4/2026
+Description: Template for logged-out state in mini_insta app  -->
+
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Logged Out - Mini Insta{% endblock %}
+{% block content %}
+<div class="logout-container">
+
+    <h3>You’ve Been Logged Out</h3>
+
+    <p>You have successfully logged out.</p>
+
+    <p>
+        <a href="{% url 'mini_insta:login' %}">
+            Log in again
+        </a>
+    </p>
+
+</div>
+{% endblock %}

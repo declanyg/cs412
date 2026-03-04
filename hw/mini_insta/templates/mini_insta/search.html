@@ -6,7 +6,7 @@ Description: Template to display search results form for profiles and posts in m
 
 {% block title %}Search - Mini Insta{% endblock %}
 {% block content %}
-<form method="get" action="{% url 'mini_insta:search_results' pk=profile.pk %}" style="gap: 12px; display: flex; flex-direction: column;">
+<form method="get" action="{% url 'mini_insta:search_results' %}" style="gap: 12px; display: flex; flex-direction: column;">
     <label>Search for text, tags, or people</label><br/>
     <input type="text" name="q" placeholder="Search..." style="height: 64px;"><br/>
     <button type="submit">Search</button>

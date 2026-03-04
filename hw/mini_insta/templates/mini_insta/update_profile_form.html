@@ -7,7 +7,7 @@ Description: Template to update a profile in mini_insta app  -->
 {% block title %}Update Profile - Mini Insta{% endblock %}
 
 {% block content %}
-<form method="post" action="{% url 'mini_insta:update_profile' profile.pk %}" enctype="multipart/form-data">
+<form method="post" action="{% url 'mini_insta:update_profile' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <div style="width: 30%;">
         {{ form.as_p }}

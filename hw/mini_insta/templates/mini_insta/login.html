@@ -1,0 +1,26 @@
+<!-- File: login.html
+Author: Declan Young (declanyg@bu.edu), 3/3/2026
+Description: Template to login to mini_insta app  -->
+
+{% extends "mini_insta/base.html" %}
+
+{% block title %}Login - Mini Insta{% endblock %}
+
+{% block content %}
+<h3>Login</h3>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Log In</button>
+
+    <input
+        type="hidden"
+        name="next"
+        value="{{ next|default:'/mini_insta/' }}"
+    >
+</form>
+
+{% endblock %}

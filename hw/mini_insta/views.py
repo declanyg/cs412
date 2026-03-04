@@ -11,7 +11,7 @@ from django.db.models import Q
 
 # Create your views here.
 class ProfileLoginRequiredMixin(LoginRequiredMixin):
-    login_url = "/login/"
+    login_url = "mini_insta:login"
 
     def get_profile(self):
         return Profile.objects.get(account=self.request.user)
@@ -185,6 +185,14 @@ class SearchView(ProfileLoginRequiredMixin,ListView):
         ).order_by("username")
 
         return context
+
+    def get_object(self, queryset=None):
+        return self.get_profile()
+
+class PersonalProfileDetailView(ProfileLoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = "mini_insta/show_profile.html"
+    context_object_name = "profile"
 
     def get_object(self, queryset=None):
         return self.get_profile()
