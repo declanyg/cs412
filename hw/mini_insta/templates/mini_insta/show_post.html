@@ -27,6 +27,20 @@ Description: Template to display a single post in mini_insta app  -->
             class="post-photo"
             draggable="false">
     {% endif %}
+
+    {% if user.is_authenticated  %}
+            {% if user.profile.first in post.get_likes_profiles %}
+                <form method="post" action="{% url 'mini_insta:delete_like_post' pk=post.pk %}">
+                    {% csrf_token %}
+                    <button type="submit">Unlike</button>
+                </form>
+            {% else %}
+                <form method="post" action="{% url 'mini_insta:like_post' pk=post.pk %}">
+                    {% csrf_token %}
+                    <button type="submit">Like</button>
+                </form>
+            {% endif %}
+    {% endif %}
     
     {% with post.get_likes as likes %}
         {% if likes.count > 1 %}
@@ -58,11 +72,13 @@ Description: Template to display a single post in mini_insta app  -->
             <p>No comments</p>
         {% endif %}
     </div>
-    <button class="update-post-button">
-        <a href="{% url 'mini_insta:update_post' post.pk %}">Update</a>
-    </button>
-    <button class="delete-post-button">
-        <a href="{% url 'mini_insta:delete_post' post.pk %}">Delete</a>
-    </button>
+    {% if user.is_authenticated and profile.account == user %}
+        <button class="update-post-button">
+            <a href="{% url 'mini_insta:update_post' %}">Update</a>
+        </button>
+        <button class="delete-post-button">
+            <a href="{% url 'mini_insta:delete_post' post.pk %}">Delete</a>
+        </button>
+    {% endif %}
 </div>
 {% endblock %}

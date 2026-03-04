@@ -32,6 +32,22 @@ Description: Template to display a single profile in mini_insta app  -->
         </button>
     </div>
 
+    <div>
+        {% if user.is_authenticated and profile.account != user %}
+            {% if profile in user.profile.first.get_following %}
+                <form method="post" action="{% url 'mini_insta:delete_follow_profile' pk=profile.pk %}">
+                    {% csrf_token %}
+                    <button type="submit">Unfollow</button>
+                </form>
+            {% else %}
+                <form method="post" action="{% url 'mini_insta:follow_profile' pk=profile.pk %}">
+                    {% csrf_token %}
+                    <button type="submit">Follow</button>
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+
     {% if user.is_authenticated and profile.account == user %}
         <button class="edit-profile-button">
             <a href="{% url 'mini_insta:update_profile' %}">Edit Profile</a>

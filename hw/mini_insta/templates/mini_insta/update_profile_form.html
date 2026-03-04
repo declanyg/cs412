@@ -13,6 +13,6 @@ Description: Template to update a profile in mini_insta app  -->
         {{ form.as_p }}
     </div>
     <button type="submit">Update Profile</button>
-    <a href="{% url 'mini_insta:show_profile' profile.pk %}" class="cancel">Cancel</a>
+    <a href="{% url 'mini_insta:show_profile' %}" class="cancel">Cancel</a>
 </form>
 {% endblock %}

@@ -51,6 +51,9 @@ class Post(models.Model):
     
     def get_likes(self):
         return self.likes.all().order_by('-timestamp')
+    
+    def get_likes_profiles(self):
+        return [like.profile for like in self.likes.all()]
 
 class Photo(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='photos')

@@ -2,11 +2,11 @@
 # Author: Declan Young (declanyg@bu.edu), 2/05/2026
 # Description: views file to handle views for mini_insta app
 
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Photo
+from .models import Profile, Post, Photo, Follow, Like
 from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
@@ -227,3 +227,43 @@ class CreateProfileView(CreateView):
 
     def get_success_url(self):
         return reverse('mini_insta:show_profile')
+
+class FollowProfileView(ProfileLoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        follower = self.get_profile()
+        target = Profile.objects.get(pk=self.kwargs['pk'])
+        
+        if follower != target:
+            Follow.objects.get_or_create(follower_profile=follower, profile=target)
+        
+        return redirect(request.META.get('HTTP_REFERER'))
+    
+class DeleteFollowProfileView(ProfileLoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        follower = self.get_profile()
+        target = Profile.objects.get(pk=self.kwargs['pk'])
+        
+        if follower != target:
+            Follow.objects.filter(follower_profile=follower, profile=target).delete()
+        
+        return redirect(request.META.get('HTTP_REFERER'))
+
+class LikePostView(ProfileLoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        liker = self.get_profile()
+        post = Post.objects.get(pk=self.kwargs['pk'])
+        
+        if liker != post.profile:
+            Like.objects.get_or_create(profile=liker, post=post)
+        
+        return redirect(request.META.get('HTTP_REFERER'))
+
+class DeleteLikePostView(ProfileLoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        liker = self.get_profile()
+        post = Post.objects.get(pk=self.kwargs['pk'])
+        
+        if liker != post.profile:
+            Like.objects.filter(profile=liker, post=post).delete()
+        
+        return redirect(request.META.get('HTTP_REFERER'))
