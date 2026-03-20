@@ -18,7 +18,8 @@ Description: Base template for voter_analytics app  -->
         </header>
         
         <nav>
-            <li><a href="javascript:history.back()">Back</a></li>
+            <li><a href="{% url 'voter_analytics:voters' %}">Voters</a></li>
+            <li><a href="{% url 'voter_analytics:graphs' %}">Graphs</a></li>
         </nav>
     
     <main>
