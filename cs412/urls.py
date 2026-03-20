@@ -23,6 +23,7 @@ urlpatterns = [
     path("quotes/", include("hw.quotes.urls")),
     path("restaurant/", include("hw.restaurant.urls")),
     path("mini_insta/", include("hw.mini_insta.urls")),
+    path("voter_analytics/", include("hw.voter_analytics.urls")),
     path("admin/", admin.site.urls),
     path("media/<path:path>",serve, {"document_root": settings.MEDIA_ROOT}),
 ]

@@ -1,0 +1,40 @@
+<!-- File: base.html
+Author: Declan Young (declanyg@bu.edu), 3/19/2026
+Description: Base template for voter_analytics app  -->
+
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Voter Analytics</title>
+        <link rel="stylesheet" href="{% static 'voter_analytics/styles_grid.css' %}">
+    </head>
+
+    <body>
+        <div class="grid-container">
+        <header>
+            <h1>Voter Analytics</h1>
+        </header>
+        
+        <nav>
+            <li><a href="javascript:history.back()">Back</a></li>
+        </nav>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <aside>
+        <p></p>
+    </aside>
+
+    <footer>
+        <p>
+            Page created by declanyg@bu.edu
+        </p>
+    </footer>
+
+</body>
+</html>
