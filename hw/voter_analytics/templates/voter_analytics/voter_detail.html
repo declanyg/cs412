@@ -1,0 +1,63 @@
+<!-- File: voter_detail.html
+Author: Declan Young (declanyg@bu.edu), 2/05/2026
+Description: Template to display individual voter details in voter_analytics app  -->
+
+{% extends "voter_analytics/base.html" %}
+
+{% block title %}
+Voter Details
+{% endblock %}
+
+{% block content %}
+
+<h3>Voter Details</h3>
+
+<p><strong>Name:</strong> {{ voter.first_name }} {{ voter.last_name }}</p>
+<p><strong>Party:</strong> {{ voter.party_affiliation }}</p>
+
+<p><strong>Date of Birth:</strong> {{ voter.date_of_birth }}</p>
+<p><strong>Registration Date:</strong> {{ voter.date_of_registration }}</p>
+
+<p><strong>Voter Score:</strong> {{ voter.voter_score }}</p>
+
+<hr>
+
+<h3>Voting History</h3>
+
+<ul>
+    <li>2020 State: {{ voter.v20state|yesno:"Yes,No" }}</li>
+    <li>2021 Town: {{ voter.v21town|yesno:"Yes,No" }}</li>
+    <li>2021 Primary: {{ voter.v21primary|yesno:"Yes,No" }}</li>
+    <li>2022 General: {{ voter.v22general|yesno:"Yes,No" }}</li>
+    <li>2023 Town: {{ voter.v23town|yesno:"Yes,No" }}</li>
+</ul>
+
+<hr>
+
+<h3>Address</h3>
+
+{% if residential_addresses %}
+    <p>
+        {{ residential_addresses.street_number }} {{ residential_addresses.street_name }}<br>
+
+        {% if residential_addresses.apartment_number %}
+            Apt {{ residential_addresses.apartment_number }}<br>
+        {% endif %}
+
+        {{ residential_addresses.zip_code }}
+    </p>
+
+    <a href="https://www.google.com/maps/search/?api=1&query=
+        {{ residential_addresses.street_number }}+{{ residential_addresses.street_name }}+{{ residential_addresses.zip_code }}"
+       target="_blank">
+        View on Google Maps
+    </a>
+{% else %}
+    <p>No address available.</p>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'voter_analytics:voters' %}">Back to Voter List</a>
+
+{% endblock %}
