@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "hw.restaurant",
     "hw.mini_insta",
     "hw.voter_analytics",
+    "hw.dadjokes",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
@@ -136,3 +138,8 @@ if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+  'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+  'PAGE_SIZE': 10
+}

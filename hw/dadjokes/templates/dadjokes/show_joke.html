@@ -1,0 +1,19 @@
+<!-- File: show_joke.html
+Author: Declan Young (declanyg@bu.edu), 4/1/2026
+Description: Show Joke template for dadjokes app  -->
+
+{% extends "dadjokes/base.html" %}
+
+{% block title %}Show Joke{% endblock %}
+
+{% block content %}
+
+<h3>Dad Joke - {{ joke.contributer_name }}</h3>
+
+{% if joke %}
+    <p>{{ joke.joke_text }}</p>
+{% else %}
+    <p>No joke available.</p>
+{% endif %}
+
+{% endblock %}

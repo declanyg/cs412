@@ -1,0 +1,42 @@
+<!-- File: base.html
+Author: Declan Young (declanyg@bu.edu), 4/1/2026
+Description: Base template for dadjokes app  -->
+
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Dad Jokes</title>
+        <link rel="stylesheet" href="{% static 'dadjokes/styles_grid.css' %}">
+    </head>
+
+    <body>
+        <div class="grid-container">
+        <header>
+            <h1>Dad Jokes</h1>
+        </header>
+        
+        <nav>
+            <li><a href="{% url 'dadjokes:show_random_joke' %}">Random</a></li>
+            <li><a href="{% url 'dadjokes:show_all_jokes' %}">Jokes</a></li>
+            <li><a href="{% url 'dadjokes:show_all_pictures' %}">Pictures</a></li>
+        </nav>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <aside>
+        <p></p>
+    </aside>
+
+    <footer>
+        <p>
+            Page created by declanyg@bu.edu
+        </p>
+    </footer>
+
+</body>
+</html>

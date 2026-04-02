@@ -1,0 +1,25 @@
+<!-- File: random_joke.html
+Author: Declan Young (declanyg@bu.edu), 4/1/2026
+Description: Random Joke template for dadjokes app  -->
+
+{% extends "dadjokes/base.html" %}
+
+{% block title %}Random Joke{% endblock %}
+
+{% block content %}
+
+<h3>Random Dad Joke</h3>
+
+{% if joke %}
+    <p>{{ joke.joke_text }}</p>
+{% else %}
+    <p>No jokes available.</p>
+{% endif %}
+
+{% if picture %}
+    <img src="{{ picture.image_url }}" alt="Dad Joke Picture" style="max-width: 400px;">
+{% else %}
+    <p>No pictures available.</p>
+{% endif %}
+
+{% endblock %}

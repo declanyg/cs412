@@ -1,0 +1,23 @@
+<!-- File: show_all_jokes.html
+Author: Declan Young (declanyg@bu.edu), 4/1/2026
+Description: Show All Jokes template for dadjokes app  -->
+
+{% extends "dadjokes/base.html" %}
+
+{% block title %}Show All Jokes{% endblock %}
+
+{% block content %}
+
+<h3>All Dad Jokes</h3>
+
+{% if joke_list %}
+    <ul>
+    {% for joke in joke_list %}
+        <a href="{% url 'dadjokes:show_joke' joke.id %}"><li>{{ joke.joke_text }}</li></a>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No jokes available.</p>
+{% endif %}
+
+{% endblock %}

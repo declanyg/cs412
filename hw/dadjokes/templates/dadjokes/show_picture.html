@@ -1,0 +1,18 @@
+<!-- File: show_picture.html
+Author: Declan Young (declanyg@bu.edu), 4/1/2026
+Description: Show Picture template for dadjokes app  -->
+
+{% extends "dadjokes/base.html" %}
+
+{% block title %}Show Picture{% endblock %}
+{% block content %}
+
+<h3>Dad Joke Picture - {{ picture.contributer_name }}</h3>
+
+{% if picture %}
+    <img src="{{ picture.image_url }}" alt="Dad Joke Picture" style="max-width: 400px;">
+{% else %}
+    <p>No picture available.</p>
+{% endif %}
+
+{% endblock %}
