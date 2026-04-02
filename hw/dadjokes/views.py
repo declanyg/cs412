@@ -52,62 +52,88 @@ class PictureDetailView(DetailView):
 
 
 #Api Definitions
-@api_view(['GET'])
+
+def cors_response(data, status=200):
+    response = Response(data, status=status)
+    response["Access-Control-Allow-Origin"] = "http://localhost:8081"
+    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
+
+@api_view(['GET', 'OPTIONS'])
 def api_random_joke(request):
+    if request.method == 'OPTIONS':
+        return cors_response({})
+    
     jokes = Joke.objects.all()
     joke = random.choice(jokes) if jokes else None
 
     if joke:
         serializer = JokeSerializer(joke)
-        return Response(serializer.data)
-    return Response({"error": "No jokes found"}, status=404)
+        return cors_response(serializer.data)
+    return cors_response({"error": "No jokes found"}, status=404)
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'OPTIONS'])
 def api_jokes(request):
+    if request.method == 'OPTIONS':
+        return cors_response({})
+
     if request.method == 'GET':
         jokes = Joke.objects.all()
         serializer = JokeSerializer(jokes, many=True)
-        return Response(serializer.data)
+        return cors_response(serializer.data)
 
     elif request.method == 'POST':
         serializer = JokeSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return cors_response(serializer.data, status=201)
+        return cors_response(serializer.errors, status=400)
 
-@api_view(['GET'])
+@api_view(['GET', 'OPTIONS'])
 def api_joke_detail(request, pk):
+    if request.method == 'OPTIONS':
+        return cors_response({})
+
     try:
         joke = Joke.objects.get(pk=pk)
     except Joke.DoesNotExist:
-        return Response({"error": "Not found"}, status=404)
+        return cors_response({"error": "Not found"}, status=404)
 
     serializer = JokeSerializer(joke)
-    return Response(serializer.data)
+    return cors_response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'OPTIONS'])
 def api_pictures(request):
+    if request.method == 'OPTIONS':
+        return cors_response({})
+
     pictures = Picture.objects.all()
     serializer = PictureSerializer(pictures, many=True)
-    return Response(serializer.data)
+    return cors_response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'OPTIONS'])
 def api_picture_detail(request, pk):
+    if request.method == 'OPTIONS':
+        return cors_response({})
+
     try:
         picture = Picture.objects.get(pk=pk)
     except Picture.DoesNotExist:
-        return Response({"error": "Not found"}, status=404)
+        return cors_response({"error": "Not found"}, status=404)
 
     serializer = PictureSerializer(picture)
-    return Response(serializer.data)
+    return cors_response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'OPTIONS'])
 def api_random_picture(request):
+    if request.method == 'OPTIONS':
+        return cors_response({})
+
     pictures = Picture.objects.all()
     picture = random.choice(pictures) if pictures else None
 
     if picture:
         serializer = PictureSerializer(picture)
-        return Response(serializer.data)
-    return Response({"error": "No pictures found"}, status=404)
+        return cors_response(serializer.data)
+    return cors_response({"error": "No pictures found"}, status=404)
