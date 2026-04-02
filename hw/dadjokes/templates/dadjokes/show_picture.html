@@ -7,7 +7,7 @@ Description: Show Picture template for dadjokes app  -->
 {% block title %}Show Picture{% endblock %}
 {% block content %}
 
-<h3>Dad Joke Picture - {{ picture.contributer_name }}</h3>
+<h3>Dad Joke Picture - {{ picture.contributor_name }}</h3>
 
 {% if picture %}
     <img src="{{ picture.image_url }}" alt="Dad Joke Picture" style="max-width: 400px;">

@@ -7,16 +7,16 @@ from django.db import models
 # Create your models here.
 class Joke(models.Model):
     joke_text = models.TextField()
-    contributer_name = models.TextField()
+    contributor_name = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.joke_text + " - " + self.contributer_name
+        return self.joke_text + " - " + self.contributor_name
     
 class Picture(models.Model):
-    contributer_name = models.TextField()
+    contributor_name = models.TextField()
     image_url = models.URLField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.contriber_name + " - " + self.image_url
+        return self.contributor_name + " - " + self.image_url
