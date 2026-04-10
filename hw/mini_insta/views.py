@@ -1,7 +1,6 @@
 # File: views.py
 # Author: Declan Young (declanyg@bu.edu), 2/05/2026
 # Description: views file to handle views for mini_insta app
-
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
@@ -10,6 +9,20 @@ from .models import Profile, Post, Photo, Follow, Like
 from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ProfileSerializer, PostSerializer, PhotoSerializer, FollowSerializer, CommentSerializer, LikeSerializer
+
+from contextvars import Token
+
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes, authentication_classes
+from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
 class ProfileLoginRequiredMixin(LoginRequiredMixin):
@@ -267,3 +280,135 @@ class DeleteLikePostView(ProfileLoginRequiredMixin, View):
             Like.objects.filter(profile=liker, post=post).delete()
         
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+#Api Definitions
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def api_profiles(request):
+    profiles = Profile.objects.all()
+    serializer = ProfileSerializer(profiles, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def api_profile_detail(request, pk):
+    try:
+        profile = Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = ProfileSerializer(profile)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def api_profile_posts(request, pk):
+    try:
+        profile = Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    posts = Post.objects.filter(profile=profile).order_by('-timestamp')
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def api_profile_pictures(request, pk):
+    try:
+        profile = Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    photos = Photo.objects.filter(post__profile=profile).order_by('-post__timestamp')
+    serializer = PhotoSerializer(photos, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def api_profile_feed(request, pk):
+    try:
+        profile = Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    posts = profile.get_post_feed()
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def api_post_pictures(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    photos = Photo.objects.filter(post=post).order_by('-timestamp')
+    serializer = PhotoSerializer(photos, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def api_create_post_for_profile(request, pk):
+    try:
+        profile = Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    caption = request.data.get("caption", "")
+    image_url = request.data.get("image_url", None)
+
+    if not caption:
+        return Response(
+            {"error": "caption is required"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    post = Post.objects.create(
+        profile=profile,
+        caption=caption
+    )
+
+    if image_url:
+        Photo.objects.create(
+            post=post,
+            image_url=image_url
+        )
+
+    return Response(
+        PostSerializer(post).data,
+        status=status.HTTP_201_CREATED
+    )
+
+@api_view(["POST"])
+def api_login(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+
+    user = authenticate(username=username, password=password)
+
+    if user is None:
+        return Response(
+            {"error": "Invalid credentials"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    token, _ = Token.objects.get_or_create(user=user)
+
+    profile = Profile.objects.get(account=user)
+
+    return Response({
+        "token": token.key,
+        "profile_id": profile.id,
+        "profile_username": profile.username,
+    })

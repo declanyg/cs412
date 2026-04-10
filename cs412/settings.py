@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "hw.mini_insta",
     "hw.voter_analytics",
     "hw.dadjokes",
-    "rest_framework"
+    "rest_framework",
+    "rest_framework.authtoken",
 ]
 
 MIDDLEWARE = [

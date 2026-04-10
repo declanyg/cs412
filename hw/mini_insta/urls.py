@@ -38,4 +38,14 @@ urlpatterns = [
     path("profile/<int:pk>/delete_follow/", views.DeleteFollowProfileView.as_view(), name="delete_follow_profile"),
     path("post/<int:pk>/like/", views.LikePostView.as_view(), name="like_post"),
     path("post/<int:pk>/delete_like/", views.DeleteLikePostView.as_view(), name="delete_like_post"),
+
+    # API endpoints
+    path("api/profiles/", views.api_profiles, name="api_profiles"),
+    path("api/profiles/<int:pk>/", views.api_profile_detail, name="api_profile_detail"),
+    path("api/profiles/<int:pk>/posts/", views.api_profile_posts, name="api_profile_posts"),
+    path("api/profiles/<int:pk>/pictures/", views.api_profile_pictures, name="api_profile_pictures"),
+    path("api/profiles/<int:pk>/feed/", views.api_profile_feed, name="api_profile_feed"),
+    path("api/profiles/<int:pk>/create_post/", views.api_create_post_for_profile, name="api_create_post_for_profile"),
+    path("api/posts/<int:pk>/pictures/", views.api_post_pictures, name="api_post_pictures"),
+    path("api/login/", views.api_login, name="api_login"),
 ]
