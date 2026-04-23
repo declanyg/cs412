@@ -1,0 +1,32 @@
+<!-- File: show_all_restaurants.html
+Author: Declan Young (declanyg@bu.edu), 22/04/2026
+Description: Template to display all restaurants in final_project app  -->
+
+{% extends "final_project/base.html" %}
+
+{% block title %}Show All Restaurants - Final Project{% endblock %}
+
+{% block content %}
+
+<ul class="restaurant-list">
+  {% for restaurant in restaurants %}
+    <li class="restaurant-item">
+      <img
+          src="{{ restaurant.image.url }}"
+          alt="{{ restaurant.name }}"
+          class="restaurant-img"
+          draggable="false"
+      >
+
+      <div class="restaurant-text">
+        <strong>{{ restaurant.name }}</strong>
+        <span class="address">{{ restaurant.address }}</span>
+      </div>
+    </li>
+  {% empty %}
+    <li>No restaurants found.</li>
+  {% endfor %}
+</ul>
+
+
+{% endblock %}

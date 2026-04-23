@@ -1,0 +1,59 @@
+<!-- File: base.html
+Author: Declan Young (declanyg@bu.edu), 20/04/2026
+Description: Base template for final_project app  -->
+
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Final Project</title>
+        <link rel="stylesheet" href="{% static 'final_project/styles_grid.css' %}">
+    </head>
+
+    <body>
+        <div class="grid-container">
+        <header>
+            <h1>Final Project</h1>
+        </header>
+        
+        <nav>
+            <li><a href="javascript:history.back()">Back</a></li>
+        </nav>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <aside>
+        <p></p>
+    </aside>
+
+    <footer>
+        <!-- {% if user.is_authenticated %}
+            <p>{{ user.username }}</p><br/>
+        {% else %}
+            <p><a href="{% url 'mini_insta:login' %}">Log in</a></p>
+            <p><a href="{% url 'mini_insta:create_profile' %}">Sign Up</a></p>
+        {% endif %} <br/> -->
+        <p>
+            Page created by declanyg@bu.edu
+        </p>
+        <nav>
+            </li>
+            <!-- {% if user.is_authenticated %}
+                <li><a href="{% url 'mini_insta:show_profile' %}">Account</a></li>
+                <li><a href="{% url 'mini_insta:search_results' %}">Search</a></li>
+                <li><a href="{% url 'mini_insta:create_post' %}">Create Post</a></li>
+                <li><a href="{% url 'mini_insta:show_feed' %}">Home Feed</a></li>
+                <li><a href="{% url 'mini_insta:logout' %}">Log Out</a></li>
+            {% else %}
+            <li><a href="{% url 'mini_insta:show_all_profiles' %}">Home</a></li>
+            {% endif %} -->
+        </nav>
+        
+    </footer>
+
+</body>
+</html>

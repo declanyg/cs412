@@ -1,0 +1,60 @@
+from django.db import models
+
+# Create your models here.
+class Customer(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    date_joined = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.last_name + ", " + self.first_name
+
+class Restaurant(models.Model):
+    name = models.CharField(max_length=200)
+    cuisine = models.CharField(max_length=100)
+    address = models.CharField(max_length=300)
+    hours = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="final_project/", blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+class MenuItem(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menu_items')
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    category = models.CharField(max_length=100)
+    available = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.restaurant.name + " - " + self.name
+
+class Order(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders')
+    delivery_address = models.CharField(max_length=300)
+    status = models.CharField(max_length=50, default='in cart')
+
+    def __str__(self):
+        return f"Order {self.id} by {self.customer.first_name} at {self.restaurant.name}"
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    special_instructions = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.menu_item.name} for Order {self.order.id}"
+
+class Review(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reviews')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.PositiveIntegerField()
+    comment = models.TextField(blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Review by {self.customer.first_name} for {self.restaurant.name}"

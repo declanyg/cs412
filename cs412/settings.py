@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "hw.dadjokes",
     "rest_framework",
     "rest_framework.authtoken",
+    "hw.final_project"
 ]
 
 MIDDLEWARE = [
