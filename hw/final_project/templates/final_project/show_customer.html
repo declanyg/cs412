@@ -1,0 +1,39 @@
+<!-- File: show_customer.html
+Author: Declan Young (declanyg@bu.edu), 24/04/2026
+Description: Template to display a single profile in final_project app  -->
+
+{% extends "final_project/base.html" %}
+
+{% block title %}Show Customer - Final Project {% endblock %}
+
+{% block content %}
+<div class="customer-detail">
+    {% if not customer.image %}
+        <img
+            src="https://upload.wikimedia.org/wikipedia/commons/0/03/Twitter_default_profile_400x400.png"
+            alt="{{ customer.first_name }} {{ customer.last_name }}"
+            class="customer-img-detail"
+            draggable="false"
+        >
+    {% else %}
+        <img
+            src="{{ customer.image.url }}"
+            alt="{{ customer.first_name }} {{ customer.last_name }}"
+            class="customer-img-detail"
+            draggable="false"
+        >
+    {% endif %}
+    
+    <strong>{{ customer.first_name }} {{ customer.last_name }}</strong>
+    <span class="username">{{ customer.username }}</span>
+    <div class="customer-text-detail">
+        <p>Date Joined: {{ customer.date_joined }}</p>
+    </div>
+
+    {% if user.is_authenticated and customer.account == user %}
+        <button class="edit-customer-button">
+            <a href="{% url 'final_project:update_customer' %}">Edit Customer</a>
+        </button>
+    {% endif %}
+</div>
+{% endblock %}

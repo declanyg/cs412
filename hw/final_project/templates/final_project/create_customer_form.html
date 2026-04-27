@@ -1,0 +1,47 @@
+<!-- File: create_customer_form.html
+Author: Declan Young (declanyg@bu.edu), 24/04/2026
+Description: Template to create a new customer in final_project app  -->
+
+{% extends "final_project/base.html" %}
+
+{% block title %}Create Customer - Final Project{% endblock %}
+
+{% block content %}
+
+<h3>Create Account & Profile</h3>
+
+<form method="post"
+      action="{% url 'final_project:create_customer' %}"
+      enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <!-- User Registration Form -->
+    <fieldset>
+        <legend>Account Information</legend>
+
+        {{ user_registration_form.as_p }}
+    </fieldset>
+
+    <br>
+
+    <!-- Profile Form -->
+    <fieldset>
+        <legend>Customer Information</legend>
+
+        <div style="width: 30%;">
+            {{ form.as_p }}
+        </div>
+    </fieldset>
+
+    <br>
+
+    <button type="submit">Create Account & Customer</button>
+
+    <a href="{% url 'final_project:show_all_restaurants' %}" class="cancel">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

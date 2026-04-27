@@ -1,5 +1,5 @@
 <!-- File: base.html
-Author: Declan Young (declanyg@bu.edu), 20/04/2026
+Author: Declan Young (declanyg@bu.edu), 23/04/2026
 Description: Base template for final_project app  -->
 
 {% load static %}
@@ -7,36 +7,58 @@ Description: Base template for final_project app  -->
 
 <html>
     <head>
-        <title>Final Project</title>
+        <title>More Eats</title>
         <link rel="stylesheet" href="{% static 'final_project/styles_grid.css' %}">
     </head>
 
     <body>
         <div class="grid-container">
         <header>
-            <h1>Final Project</h1>
+            <h1>More Eats</h1>
         </header>
         
-        <nav>
-            <li><a href="javascript:history.back()">Back</a></li>
-        </nav>
+        <div class="nav-wrapper">
+            <nav>
+                <ul>
+                    <li><a href="{% url 'final_project:index' %}">Home</a></li>
+                    <li></li>
+                    {% if category_list %}
+                        <li><a href="#menu">Menu</a></li>
+                        {% for category, items in category_list.items %}
+                            <li>
+                                <a href="#category-{{ category|slugify }}">
+                                    {{ category }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        <li><a href="#reviews">Reviews</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
-    <aside>
-        <p></p>
-    </aside>
+    <div class="aside-wrapper">
+        <aside>
+            <nav>
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'final_project:show_customer' %}">{{ user.username }}</a></li>
+                    {% else %}
+                        <p><a href="{% url 'final_project:login' %}">Login</a></p>
+                        <p><a href="{% url 'final_project:create_customer' %}">Sign Up</a></p>
+                    {% endif %} <br/>
+                    <li>Cart</li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
 
     <footer>
-        <!-- {% if user.is_authenticated %}
-            <p>{{ user.username }}</p><br/>
-        {% else %}
-            <p><a href="{% url 'mini_insta:login' %}">Log in</a></p>
-            <p><a href="{% url 'mini_insta:create_profile' %}">Sign Up</a></p>
-        {% endif %} <br/> -->
         <p>
             Page created by declanyg@bu.edu
         </p>

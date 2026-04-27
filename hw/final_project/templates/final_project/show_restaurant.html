@@ -1,5 +1,5 @@
 <!-- File: show_restaurant.html
-Author: Declan Young (declanyg@bu.edu), 4/22/2026
+Author: Declan Young (declanyg@bu.edu), 22/04/2026
 Description: Template to display a single restaurant in final_project app  -->
 
 {% extends "final_project/base.html" %}
@@ -7,6 +7,83 @@ Description: Template to display a single restaurant in final_project app  -->
 
 {% block content %}
 
+<div class="restaurant-detail">
 
+  <!-- Restaurant Info -->
+  <div class="restaurant-header">
+    {% if restaurant.image %}
+      <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="restaurant-img">
+    {% else %}
+      <p>No image available</p>
+    {% endif %}
+
+    <div class="restaurant-text">
+      <h1>{{ restaurant.name }}</h1>
+      <p><strong>Cuisine:</strong> {{ restaurant.cuisine }}</p>
+      <p class="address">{{ restaurant.address }}</p>
+      <p><strong>Hours:</strong> {{ restaurant.hours }}</p>
+      <p>
+        <strong>Average Rating:</strong> 
+        {% if restaurant.get_average_rating %} 
+            {{ restaurant.get_average_rating|floatformat:1 }} 
+            ({{ restaurant.get_num_reviews }})
+        {% else %} 
+        No ratings yet 
+        {% endif %} 
+    </p>
+    </div>
+  </div>
+
+  <!-- Menu Section -->
+  <div id="menu" class="menu-section">
+    <h2>Menu</h2>
+
+    {% for category, items in category_list.items %}
+      <div id="category-{{ category|slugify }}" class="menu-category">
+        <h3>{{ category }}</h3>
+
+        <ul class="menu-list">
+          {% for item in items %}
+            {% if item.available %}
+              <li class="menu-item">
+                <div class="menu-item-header">
+                  <span class="menu-item-name">{{ item.name }}</span>
+                  <span class="menu-item-price">${{ item.price }}</span>
+                  <button class="add-to-cart-btn" {% if not item.available %}disabled{% endif %}>+</button>
+                </div>
+                {% if item.description %}
+                  <p class="menu-item-description">{{ item.description }}</p>
+                {% endif %}
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% empty %}
+      <p>No menu items available.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Reviews Section -->
+  <div id="reviews" class="reviews-section">
+    <h2>Reviews</h2>
+
+    {% for review in restaurant.reviews.all %}
+      <div class="review">
+        <div class="review-header">
+          <strong>{{ review.customer.first_name }} {{ review.customer.last_name }}</strong>
+          <span class="rating">⭐ {{ review.rating }}/5</span>
+        </div>
+        {% if review.comment %}
+          <p>{{ review.comment }}</p>
+        {% endif %}
+        <small>{{ review.timestamp }}</small>
+      </div>
+    {% empty %}
+      <p>No reviews yet.</p>
+    {% endfor %}
+  </div>
+
+</div>
 
 {% endblock %}

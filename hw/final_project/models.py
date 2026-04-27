@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.db import models
 
 # Create your models here.
@@ -5,7 +7,9 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
+    image = models.ImageField(upload_to="final_project/customers/", blank=True, null=True)
     date_joined = models.DateField(auto_now_add=True)
+    account = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='customer')
 
     def __str__(self):
         return self.last_name + ", " + self.first_name
@@ -16,6 +20,22 @@ class Restaurant(models.Model):
     address = models.CharField(max_length=300)
     hours = models.CharField(max_length=100)
     image = models.ImageField(upload_to="final_project/", blank=True, null=True)
+
+    def get_menu_by_category(self):
+        category_list = defaultdict(list)
+        for item in self.menu_items.all():
+            category_list[item.category].append(item)
+        return dict(category_list)
+
+    def get_average_rating(self):
+        reviews = self.reviews.all()
+        if not reviews:
+            return None
+        total_rating = sum(review.rating for review in reviews)
+        return total_rating / len(reviews)
+
+    def get_num_reviews(self):
+        return self.reviews.count()
 
     def __str__(self):
         return self.name

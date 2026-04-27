@@ -10,7 +10,8 @@ Description: Template to display all restaurants in final_project app  -->
 
 <ul class="restaurant-list">
   {% for restaurant in restaurants %}
-    <li class="restaurant-item">
+    <a href="{% url 'final_project:show_restaurant' restaurant.id %}">
+      <li class="restaurant-item">
       <img
           src="{{ restaurant.image.url }}"
           alt="{{ restaurant.name }}"
@@ -23,6 +24,7 @@ Description: Template to display all restaurants in final_project app  -->
         <span class="address">{{ restaurant.address }}</span>
       </div>
     </li>
+    </a>
   {% empty %}
     <li>No restaurants found.</li>
   {% endfor %}
