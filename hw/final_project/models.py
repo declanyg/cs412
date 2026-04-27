@@ -1,8 +1,6 @@
 from collections import defaultdict
-
 from django.db import models
 
-# Create your models here.
 class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -13,6 +11,7 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.last_name + ", " + self.first_name
+    
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=200)
@@ -20,6 +19,8 @@ class Restaurant(models.Model):
     address = models.CharField(max_length=300)
     hours = models.CharField(max_length=100)
     image = models.ImageField(upload_to="final_project/", blank=True, null=True)
+
+    owner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='owned_restaurants')
 
     def get_menu_by_category(self):
         category_list = defaultdict(list)
@@ -40,6 +41,7 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
+
 class MenuItem(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menu_items')
     name = models.CharField(max_length=200)
@@ -51,6 +53,7 @@ class MenuItem(models.Model):
     def __str__(self):
         return self.restaurant.name + " - " + self.name
 
+
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders')
@@ -60,6 +63,7 @@ class Order(models.Model):
     def __str__(self):
         return f"Order {self.id} by {self.customer.first_name} at {self.restaurant.name}"
 
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
@@ -68,6 +72,7 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.menu_item.name} for Order {self.order.id}"
+
 
 class Review(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reviews')
