@@ -1,81 +1,90 @@
-<!-- File: base.html
+{% comment %}
+File: base.html
 Author: Declan Young (declanyg@bu.edu), 23/04/2026
-Description: Base template for final_project app  -->
+Description: Base template for final_project app
+{% endcomment %}
 
 {% load static %}
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More Eats</title>
+    <link rel="stylesheet" href="{% static 'final_project/styles_grid.css' %}">
+</head>
 
-<html>
-    <head>
-        <title>More Eats</title>
-        <link rel="stylesheet" href="{% static 'final_project/styles_grid.css' %}">
-    </head>
+<body>
+<div class="grid-container">
 
-    <body>
-        <div class="grid-container">
-        <header>
-            <h1>More Eats</h1>
-        </header>
-        
-        <div class="nav-wrapper">
-            <nav>
-                <ul>
-                    <li><a href="{% url 'final_project:index' %}">Home</a></li>
-                    <li></li>
-                    {% if category_list %}
-                        <li><a href="#menu">Menu</a></li>
-                        {% for category, items in category_list.items %}
-                            <li>
-                                <a href="#category-{{ category|slugify }}">
-                                    {{ category }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                        <li><a href="#reviews">Reviews</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    
+    <!-- ── HEADER ───────────────────────────────────────── -->
+    <header>
+        <h1>More<span> Food</span></h1>
+        <p class="header-tagline">Get food delivered</p>
+    </header>
+
+    <!-- ── SIDE NAV ─────────────────────────────────────── -->
+    <div class="nav-wrapper">
+        <nav>
+            <ul>
+                <li><a href="{% url 'final_project:index' %}">🏠 Home</a></li>
+
+                {% if category_list %}
+                    <li class="nav-section-label">Menu</li>
+                    {% for category, items in category_list.items %}
+                        <li>
+                            <a href="#category-{{ category|slugify }}">
+                                {{ category }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    <li class="nav-section-label">More</li>
+                    <li><a href="#reviews">Reviews</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <!-- ── MAIN CONTENT ─────────────────────────────────── -->
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
+    <!-- ── ASIDE ────────────────────────────────────────── -->
     <div class="aside-wrapper">
         <aside>
             <nav>
-                <ul>
-                    {% if user.is_authenticated %}
-                        <li><a href="{% url 'final_project:show_customer' %}">{{ user.username }}</a></li>
-                    {% else %}
-                        <p><a href="{% url 'final_project:login' %}">Login</a></p>
-                        <p><a href="{% url 'final_project:create_customer' %}">Sign Up</a></p>
-                    {% endif %} <br/>
-                    <li>Cart</li>
-                </ul>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'final_project:show_customer' %}" class="user-pill">
+                        <div class="user-avatar">{{ user.username|first|upper }}</div>
+                        {{ user.username }}
+                    </a>
+                {% else %}
+                    <a href="{% url 'final_project:login' %}" class="aside-link">Log in</a>
+                    <a href="{% url 'final_project:create_customer' %}" class="aside-link">Sign up</a>
+                {% endif %}
+
+                <a href="{% url 'final_project:show_cart' %}" class="cart-btn">
+                    <span class="cart-icon">🛒</span> Cart
+                </a>
+                
+                <a href="{% url 'final_project:show_orders' %}" class="orders-btn">
+                    <span class="cart-icon">📦</span> Orders
+                </a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'final_project:logout' %}" class="aside-link">Log out</a>
+                {% endif %}
             </nav>
         </aside>
     </div>
 
+    <!-- ── FOOTER ────────────────────────────────────────── -->
     <footer>
-        <p>
-            Page created by declanyg@bu.edu
-        </p>
-        <nav>
-            </li>
-            <!-- {% if user.is_authenticated %}
-                <li><a href="{% url 'mini_insta:show_profile' %}">Account</a></li>
-                <li><a href="{% url 'mini_insta:search_results' %}">Search</a></li>
-                <li><a href="{% url 'mini_insta:create_post' %}">Create Post</a></li>
-                <li><a href="{% url 'mini_insta:show_feed' %}">Home Feed</a></li>
-                <li><a href="{% url 'mini_insta:logout' %}">Log Out</a></li>
-            {% else %}
-            <li><a href="{% url 'mini_insta:show_all_profiles' %}">Home</a></li>
-            {% endif %} -->
-        </nav>
-        
+        <p>Page created by <a href="mailto:declanyg@bu.edu">declanyg@bu.edu</a></p>
     </footer>
 
+</div><!-- /.grid-container -->
 </body>
 </html>

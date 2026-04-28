@@ -1,0 +1,67 @@
+<!-- File: edit_review.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Standalone page for editing or deleting an existing review. -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="edit-review-wrapper">
+
+    <a href="{% url 'final_project:show_customer' %}" class="status-back">← Back to profile</a>
+
+    <div class="review-section">
+        <div class="review-section-header">
+            <h3>Edit your review</h3>
+            <p>
+                Your review of
+                <a href="{% url 'final_project:show_restaurant' review.restaurant.pk %}">
+                    <strong>{{ review.restaurant.name }}</strong>
+                </a>.
+            </p>
+        </div>
+
+        <form method="POST" class="review-form">
+            {% csrf_token %}
+
+            <fieldset class="review-rating">
+                <legend>Rating</legend>
+                <div class="review-stars-input">
+                    {% for radio in form.rating %}
+                        <label class="review-star-option">
+                            {{ radio.tag }}
+                            <span class="review-star-glyph" aria-hidden="true">★</span>
+                            <span class="visually-hidden">{{ radio.choice_label }} stars</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                {% if form.rating.errors %}
+                    <p class="review-error">{{ form.rating.errors|join:", " }}</p>
+                {% endif %}
+            </fieldset>
+
+            <div class="review-field">
+                <label for="{{ form.comment.id_for_label }}">Your review</label>
+                {{ form.comment }}
+                {% if form.comment.errors %}
+                    <p class="review-error">{{ form.comment.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+
+            <div class="review-actions">
+                <button type="submit" class="btn">Save changes</button>
+            </div>
+        </form>
+
+        <form method="POST"
+              action="{% url 'final_project:delete_review' review.pk %}"
+              class="review-delete-form"
+              onsubmit="return confirm('Delete this review? This cannot be undone.');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete review</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

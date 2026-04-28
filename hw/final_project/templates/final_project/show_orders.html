@@ -1,0 +1,60 @@
+<!-- File: show_orders.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Template to display all of a customer's placed orders -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="orders-header">
+    <h2>Your Orders</h2>
+    <p class="orders-subtitle">Past and active deliveries placed from your account.</p>
+</div>
+
+{% if not orders %}
+    <p class="orders-empty">
+        You haven't placed any orders yet —
+        <a href="{% url 'final_project:index' %}">browse restaurants</a>
+    </p>
+
+{% else %}
+
+    <!-- ── ACTIVE ORDERS ────────────────────────────────────── -->
+    <section class="orders-section">
+        <div class="orders-section-title">
+            <h3>Active</h3>
+            <span class="orders-section-count">{{ active_orders|length }}</span>
+        </div>
+
+        {% if active_orders %}
+            <ul class="orders-list">
+                {% for order in active_orders %}
+                    {% include 'final_project/_order_card.html' with order=order %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="orders-section-empty">No orders in flight right now.</p>
+        {% endif %}
+    </section>
+
+    <!-- ── PAST ORDERS ──────────────────────────────────────── -->
+    <section class="orders-section">
+        <div class="orders-section-title">
+            <h3>Past</h3>
+            <span class="orders-section-count">{{ past_orders|length }}</span>
+        </div>
+
+        {% if past_orders %}
+            <ul class="orders-list">
+                {% for order in past_orders %}
+                    {% include 'final_project/_order_card.html' with order=order %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="orders-section-empty">Nothing in your history yet.</p>
+        {% endif %}
+    </section>
+
+{% endif %}
+
+{% endblock %}

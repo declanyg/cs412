@@ -1,0 +1,62 @@
+<!-- File: edit_order_item.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Template to edit or delete order items in final_project app  -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="edit-order-wrapper">
+
+    <a href="{% url 'final_project:show_cart' %}" class="edit-back-link">← Back to cart</a>
+
+    <h2>Edit Item</h2>
+
+    <div class="edit-item-summary">
+        <span class="edit-item-name">{{ order_item.menu_item.name }}</span>
+        <span class="menu-item-price">${{ order_item.menu_item.price }}</span>
+    </div>
+
+    {% if order_item.menu_item.description %}
+        <p class="edit-item-description">{{ order_item.menu_item.description }}</p>
+    {% endif %}
+
+    <form method="POST" class="edit-order-form">
+        {% csrf_token %}
+
+        <div class="edit-field">
+            <label for="id_quantity">Quantity</label>
+            <div class="qty-stepper">
+                <input type="number"
+                       name="quantity"
+                       id="id_quantity"
+                       value="{{ order_item.quantity }}"
+                       min="1" max="99">
+            </div>
+        </div>
+
+        <div class="edit-field">
+            <label for="id_special_instructions">Special instructions</label>
+            <textarea name="special_instructions"
+                      id="id_special_instructions"
+                      rows="3"
+                      placeholder="E.g. no onions, extra sauce…">{{ order_item.special_instructions }}</textarea>
+        </div>
+
+        <div class="edit-actions">
+            <a href="{% url 'final_project:show_cart' %}" class="btn btn-outline">Cancel</a>
+            <button type="submit" class="btn">Save changes</button>
+        </div>
+
+    </form>
+
+    <form method="POST"
+          action="{% url 'final_project:delete_order_item' order_item.pk %}"
+          onsubmit="return confirm('Remove {{ order_item.menu_item.name }} from your cart?');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Remove Item</button>
+    </form>
+
+</div>
+
+{% endblock %}

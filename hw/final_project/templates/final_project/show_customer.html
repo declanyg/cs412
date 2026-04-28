@@ -36,4 +36,57 @@ Description: Template to display a single profile in final_project app  -->
         </button>
     {% endif %}
 </div>
+
+<!-- ── REVIEWS WRITTEN BY THIS CUSTOMER ────────────────── -->
+<section class="profile-reviews">
+    <div class="profile-reviews-header">
+        <h3>Your Reviews</h3>
+        <span class="profile-reviews-count">{{ reviews|length }}</span>
+    </div>
+
+    {% if reviews %}
+        <ul class="profile-review-list">
+            {% for review in reviews %}
+            <li class="profile-review-card">
+                <div class="profile-review-top">
+                    <a href="{% url 'final_project:show_restaurant' review.restaurant.pk %}"
+                       class="profile-review-restaurant">
+                        {% if review.restaurant.image %}
+                            <img src="{{ review.restaurant.image.url }}"
+                                 alt="{{ review.restaurant.name }}"
+                                 class="profile-review-img">
+                        {% endif %}
+                        <div>
+                            <strong>{{ review.restaurant.name }}</strong>
+                            <span class="cart-cuisine">{{ review.restaurant.cuisine }}</span>
+                        </div>
+                    </a>
+                    <span class="profile-review-rating" title="{{ review.rating }}/5">
+                        {% for _ in "12345"|make_list %}
+                            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                        {% endfor %}
+                    </span>
+                </div>
+
+                {% if review.comment %}
+                    <p class="profile-review-comment">{{ review.comment }}</p>
+                {% endif %}
+
+                <div class="profile-review-footer">
+                    <small class="profile-review-meta">{{ review.timestamp|date:"M j, Y" }}</small>
+                    {% if user.is_authenticated and customer.account == user %}
+                        <a href="{% url 'final_project:edit_review' review.pk %}"
+                           class="profile-review-edit">Edit</a>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="profile-reviews-empty">
+            You haven't written any reviews yet. After your next delivery, leave one from the order page.
+        </p>
+    {% endif %}
+</section>
+
 {% endblock %}

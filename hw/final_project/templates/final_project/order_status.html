@@ -1,0 +1,159 @@
+<!-- File: order_status.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Per-order status timeline page, linked from show_orders.html. -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="status-wrapper">
+
+    <!-- Header -->
+    <div class="status-header">
+        <a href="{% url 'final_project:show_orders' %}" class="status-back">← Back to orders</a>
+        <h2>Order #{{ order.id }}</h2>
+        <p class="status-subtitle">
+            From <strong>{{ order.restaurant.name }}</strong>
+        </p>
+    </div>
+
+    <!-- Cancelled banner short-circuits the timeline -->
+    {% if is_cancelled %}
+        <div class="status-banner status-banner-cancelled">
+            <span class="status-banner-icon">✕</span>
+            <div>
+                <strong>Order cancelled</strong>
+                <p>This order won't be delivered. Contact the restaurant if you need help.</p>
+            </div>
+        </div>
+
+    {% else %}
+        <!-- Vertical step timeline -->
+        <ol class="status-timeline">
+            {% for step in steps %}
+            <li class="status-step status-step-{{ step.state }}">
+                <span class="status-dot" aria-hidden="true">
+                    {% if step.state == 'done' %}✓{% endif %}
+                </span>
+                <div class="status-step-body">
+                    <span class="status-step-label">{{ step.label }}</span>
+                    <span class="status-step-blurb">{{ step.blurb }}</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+
+        {% if is_complete %}
+            <div class="status-banner status-banner-done">
+                <span class="status-banner-icon">✓</span>
+                <div>
+                    <strong>Delivered</strong>
+                    <p>This order is complete. Thanks for ordering!</p>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <!-- Summary card -->
+    <div class="status-summary">
+        <div class="status-summary-row">
+            <span class="status-summary-label">Delivering to</span>
+            <span>{{ order.delivery_address }}</span>
+        </div>
+        <div class="status-summary-row">
+            <span class="status-summary-label">Restaurant</span>
+            <a href="{% url 'final_project:show_restaurant' order.restaurant.pk %}">
+                {{ order.restaurant.name }}
+            </a>
+        </div>
+
+        <ul class="status-item-list">
+            {% for order_item in order.order_items.all %}
+            <li class="status-item">
+                <span class="status-item-name">
+                    {{ order_item.menu_item.name }}
+                    <span class="status-item-qty">× {{ order_item.quantity }}</span>
+                </span>
+                <span class="status-item-price">${{ order_item.menu_item.price }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="status-summary-total">
+            <span>Total</span>
+            <span>${{ order.get_total }}</span>
+        </div>
+    </div>
+
+    <div class="status-actions">
+        <a href="{% url 'final_project:order_confirmation' order.pk %}" class="btn btn-outline">
+            View receipt
+        </a>
+        <a href="{% url 'final_project:show_restaurant' order.restaurant.pk %}" class="btn">
+            Order again
+        </a>
+    </div>
+
+    <!-- ── WRITE A REVIEW ──────────────────────────────────── -->
+    <section class="review-section">
+        <div class="review-section-header">
+            <h3>{% if existing_review %}Your review{% else %}Leave a review{% endif %}</h3>
+            <p>
+                {% if existing_review %}
+                    You've reviewed <strong>{{ order.restaurant.name }}</strong>. Update it any time.
+                {% else %}
+                    How was your order from <strong>{{ order.restaurant.name }}</strong>?
+                {% endif %}
+            </p>
+        </div>
+
+        <form method="POST"
+              action="{% url 'final_project:write_review' order.restaurant.pk %}"
+              class="review-form">
+            {% csrf_token %}
+
+            <fieldset class="review-rating">
+                <legend>Rating</legend>
+                <div class="review-stars-input">
+                    {% for radio in review_form.rating %}
+                        <label class="review-star-option">
+                            {{ radio.tag }}
+                            <span class="review-star-glyph" aria-hidden="true">★</span>
+                            <span class="visually-hidden">{{ radio.choice_label }} stars</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                {% if review_form.rating.errors %}
+                    <p class="review-error">{{ review_form.rating.errors|join:", " }}</p>
+                {% endif %}
+            </fieldset>
+
+            <div class="review-field">
+                <label for="{{ review_form.comment.id_for_label }}">Your review</label>
+                {{ review_form.comment }}
+                {% if review_form.comment.errors %}
+                    <p class="review-error">{{ review_form.comment.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+
+            <div class="review-actions">
+                <button type="submit" class="btn">
+                    {% if existing_review %}Update review{% else %}Post review{% endif %}
+                </button>
+            </div>
+        </form>
+
+        {% if existing_review %}
+            <form method="POST"
+                  action="{% url 'final_project:delete_review' existing_review.pk %}"
+                  class="review-delete-form"
+                  onsubmit="return confirm('Delete this review? This cannot be undone.');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete review</button>
+            </form>
+        {% endif %}
+    </section>
+
+</div>
+
+{% endblock %}

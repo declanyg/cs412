@@ -45,16 +45,28 @@ Description: Template to display a single restaurant in final_project app  -->
         <ul class="menu-list">
           {% for item in items %}
             {% if item.available %}
-              <li class="menu-item">
-                <div class="menu-item-header">
-                  <span class="menu-item-name">{{ item.name }}</span>
-                  <span class="menu-item-price">${{ item.price }}</span>
-                  <button class="add-to-cart-btn" {% if not item.available %}disabled{% endif %}>+</button>
+                <div class="menu-item">
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <span>{{ item.name }}</span>
+                            <span class="menu-item-price">${{ item.price }}</span>
+                        </div>
+                        <p class="menu-item-description">{{ item.description }}</p>
+                    </div>
+                    <div class="cart-controls">
+                        {% if item.qty_in_cart %}
+                            <form method="post" action="{% url 'final_project:decrement_from_cart' pk=item.pk %}">
+                                {% csrf_token %}
+                                <button class="add-to-cart-btn decrement-btn" title="Remove one from cart">−</button>
+                            </form>
+                            <span class="cart-qty-badge" title="In cart">{{ item.qty_in_cart }}</span>
+                        {% endif %}
+                        <form method="post" action="{% url 'final_project:add_to_cart' pk=item.pk %}">
+                            {% csrf_token %}
+                            <button class="add-to-cart-btn" title="Add to cart">+</button>
+                        </form>
+                    </div>
                 </div>
-                {% if item.description %}
-                  <p class="menu-item-description">{{ item.description }}</p>
-                {% endif %}
-              </li>
             {% endif %}
           {% endfor %}
         </ul>

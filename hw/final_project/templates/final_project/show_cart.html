@@ -1,0 +1,106 @@
+<!-- File: show_cart.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Template to display cart contents in final_project app  -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<h2>Your Cart</h2>
+
+{% if not orders %}
+    <p class="cart-empty">
+        Your cart is empty — <a href="{% url 'final_project:index' %}">browse restaurants</a>
+    </p>
+
+{% else %}
+    {% for order in orders %}
+    <div class="cart-order">
+
+        <!-- Restaurant header -->
+        <div class="cart-order-header">
+            {% if order.restaurant.image %}
+                <img src="{{ order.restaurant.image.url }}"
+                     alt="{{ order.restaurant.name }}"
+                     class="cart-restaurant-img">
+            {% endif %}
+            <div>
+                <h3>{{ order.restaurant.name }}</h3>
+                <span class="cart-cuisine">{{ order.restaurant.cuisine }}</span>
+            </div>
+        </div>
+
+        <!-- Order items -->
+        <ul class="cart-item-list">
+            {% for order_item in order.order_items.all %}
+            <li class="cart-item">
+                <div class="cart-item-info">
+                    <span class="cart-item-name">{{ order_item.menu_item.name }}</span>
+                    {% if order_item.special_instructions %}
+                        <span class="cart-item-note"><strong>Note:</strong> {{ order_item.special_instructions }}</span>
+                    {% endif %}
+                </div>
+                <div class="cart-item-right">
+                    <div class="cart-controls">
+                        <form method="post" action="{% url 'final_project:decrement_from_cart' pk=order_item.menu_item.pk %}">
+                            {% csrf_token %}
+                            <button class="add-to-cart-btn decrement-btn" title="Remove one">−</button>
+                        </form>
+                        <span class="cart-qty-badge">{{ order_item.quantity }}</span>
+                        <form method="post" action="{% url 'final_project:add_to_cart' pk=order_item.menu_item.pk %}">
+                            {% csrf_token %}
+                            <button class="add-to-cart-btn" title="Add one">+</button>
+                        </form>
+                    </div>
+                    <span class="cart-item-price">${{ order_item.menu_item.price }}</span>
+                    <a href="{% url 'final_project:edit_order_item' order_item.pk %}"
+                       class="cart-edit-link">Edit</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Order total -->
+        <div class="cart-order-footer">
+            <span class="cart-total-label">Order total</span>
+            <span class="cart-total-value">${{ order.get_total }}</span>
+        </div>
+
+        <!-- Place order form with delivery address -->
+        <form method="POST"
+              action="{% url 'final_project:place_order' order.pk %}"
+              class="cart-checkout-form">
+            {% csrf_token %}
+
+            <div class="cart-address-field">
+                <label for="delivery_address_{{ order.pk }}">Delivery address</label>
+                <input type="text"
+                       name="delivery_address"
+                       id="delivery_address_{{ order.pk }}"
+                       placeholder="Enter your delivery address"
+                       value="{{ order.delivery_address }}">
+                {% if address_error_order == order.pk %}
+                    <span class="cart-address-error">Please enter a delivery address.</span>
+                {% endif %}
+            </div>
+
+            <div class="cart-actions">
+                <a href="{% url 'final_project:show_restaurant' order.restaurant.pk %}"
+                   class="btn btn-outline">← Back to menu</a>
+                <button type="submit" class="btn">Place Order</button>
+            </div>
+        </form>
+
+        <form method="POST"
+              action="{% url 'final_project:delete_order' order.pk %}"
+              class="cart-delete-form"
+              onsubmit="return confirm('Remove this order from your cart?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete Order</button>
+        </form>
+
+    </div>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

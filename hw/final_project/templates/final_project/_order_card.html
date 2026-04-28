@@ -1,0 +1,69 @@
+<!-- File: _order_card.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Reusable order card partial used by show_orders.html.
+Expects an `order` variable in context. -->
+
+<li class="orders-card">
+
+    <!-- Restaurant header -->
+    <div class="orders-card-header">
+        {% if order.restaurant.image %}
+            <img src="{{ order.restaurant.image.url }}"
+                 alt="{{ order.restaurant.name }}"
+                 class="cart-restaurant-img">
+        {% endif %}
+        <div class="orders-card-title">
+            <h3>
+                <a href="{% url 'final_project:show_restaurant' order.restaurant.pk %}">
+                    {{ order.restaurant.name }}
+                </a>
+            </h3>
+            <span class="cart-cuisine">{{ order.restaurant.cuisine }}</span>
+        </div>
+        <span class="orders-status orders-status-{{ order.status|slugify }}">
+            {{ order.status|title }}
+        </span>
+    </div>
+
+    <!-- Meta row -->
+    <div class="orders-meta">
+        <div class="orders-meta-item">
+            <span class="orders-meta-label">Order #</span>
+            <span>{{ order.id }}</span>
+        </div>
+        <div class="orders-meta-item">
+            <span class="orders-meta-label">Delivering to</span>
+            <span class="orders-meta-address">{{ order.delivery_address }}</span>
+        </div>
+    </div>
+
+    <!-- Items -->
+    <ul class="orders-item-list">
+        {% for order_item in order.order_items.all %}
+        <li class="orders-item">
+            <span class="orders-item-name">
+                {{ order_item.menu_item.name }}
+                <span class="orders-item-qty">× {{ order_item.quantity }}</span>
+            </span>
+            <span class="orders-item-price">
+                ${{ order_item.menu_item.price }}
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Footer with total + link -->
+    <div class="orders-card-footer">
+        <div class="orders-total">
+            <span class="orders-total-label">Total</span>
+            <span class="orders-total-value">${{ order.get_total }}</span>
+        </div>
+        <div class="orders-card-actions">
+            <a href="{% url 'final_project:order_confirmation' order.pk %}"
+               class="btn btn-outline orders-detail-btn">Receipt</a>
+            <a href="{% url 'final_project:order_status' order.pk %}"
+               class="btn orders-detail-btn">Track order</a>
+        </div>
+    </div>
+
+</li>

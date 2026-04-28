@@ -1,3 +1,7 @@
+# File: models.py
+# Author: Declan Young (declanyg@bu.edu), 20/04/2026
+# Description: models file to handle models for final_project app
+
 from collections import defaultdict
 from django.db import models
 
@@ -62,6 +66,9 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} by {self.customer.first_name} at {self.restaurant.name}"
+    
+    def get_total(self):
+        return sum(item.menu_item.price * item.quantity for item in self.order_items.all())
 
 
 class OrderItem(models.Model):
