@@ -1,0 +1,56 @@
+<!-- File: _manage_order_card.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Reusable order card partial for the owner manage_orders page.
+Expects `order` and `status_choices` in context. -->
+
+<li class="manage-order-card">
+
+    <div class="manage-order-header">
+        <div class="manage-order-headline">
+            <h4>Order #{{ order.id }}</h4>
+            <span class="orders-status orders-status-{{ order.status|slugify }}">
+                {{ order.status|title }}
+            </span>
+        </div>
+        <div class="manage-order-meta">
+            <span><strong>{{ order.restaurant.name }}</strong></span>
+            <span>· {{ order.customer.first_name }} {{ order.customer.last_name }}</span>
+        </div>
+        <div class="manage-order-address">
+            Delivering to <em>{{ order.delivery_address|default:"—" }}</em>
+        </div>
+    </div>
+
+    <ul class="manage-order-items">
+        {% for order_item in order.order_items.all %}
+        <li>
+            <span>{{ order_item.menu_item.name }} <span class="orders-item-qty">× {{ order_item.quantity }}</span></span>
+            <span class="orders-item-price">${{ order_item.menu_item.price }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="manage-order-footer">
+        <div class="manage-order-total">
+            <span class="orders-total-label">Total</span>
+            <span class="orders-total-value">${{ order.get_total }}</span>
+        </div>
+
+        <form method="POST"
+              action="{% url 'final_project:update_order_status' order.pk %}"
+              class="manage-order-status-form">
+            {% csrf_token %}
+            <label for="status_{{ order.pk }}" class="visually-hidden">Status</label>
+            <select name="status" id="status_{{ order.pk }}" class="manage-order-status-select">
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}"
+                            {% if order.status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn manage-order-save-btn">Update</button>
+        </form>
+    </div>
+
+</li>

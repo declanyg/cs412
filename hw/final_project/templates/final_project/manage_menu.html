@@ -1,0 +1,107 @@
+<!-- File: manage_menu.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Per-restaurant menu management page (owner-only). -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="manage-menu-wrapper">
+
+    <a href="{% url 'final_project:manage_restaurants' %}" class="status-back">← Back to manage</a>
+
+    <div class="manage-header">
+        <div>
+            <h2>{{ restaurant.name }} — Menu</h2>
+            <p class="manage-subtitle">Add new dishes, mark items unavailable, or remove them entirely.</p>
+        </div>
+        <a href="{% url 'final_project:show_restaurant' restaurant.pk %}" class="btn btn-outline">
+            View public page
+        </a>
+    </div>
+
+    <!-- Add Menu Item Form -->
+    <section class="restaurant-form-card">
+        <div class="restaurant-form-header">
+            <h3>Add a menu item</h3>
+            <p>New items default to available — uncheck to keep hidden until ready.</p>
+        </div>
+
+        <form method="POST"
+              action="{% url 'final_project:create_menu_item' restaurant.pk %}"
+              class="restaurant-form menu-item-create-form">
+            {% csrf_token %}
+
+            {% for field in create_form %}
+                <div class="restaurant-form-field {% if field.name == 'available' %}menu-item-checkbox{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="review-error">{{ field.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="restaurant-form-actions">
+                <button type="submit" class="btn">Add item</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Existing Menu Items -->
+    {% if not categories %}
+        <div class="manage-empty">
+            <h3>Empty menu</h3>
+            <p>You haven't added any items yet. Use the form above to add your first dish.</p>
+        </div>
+    {% else %}
+        {% for category, items in categories.items %}
+        <section class="menu-manage-category">
+            <h3>{{ category }}</h3>
+            <ul class="menu-manage-list">
+                {% for item in items %}
+                <li class="menu-manage-item {% if not item.available %}menu-manage-item-unavailable{% endif %}">
+                    <div class="menu-manage-info">
+                        <div class="menu-manage-headline">
+                            <strong>{{ item.name }}</strong>
+                            <span class="menu-manage-price">${{ item.price }}</span>
+                            {% if not item.available %}
+                                <span class="menu-manage-pill menu-manage-pill-off">Unavailable</span>
+                            {% else %}
+                                <span class="menu-manage-pill menu-manage-pill-on">Available</span>
+                            {% endif %}
+                        </div>
+                        {% if item.description %}
+                            <p class="menu-manage-description">{{ item.description }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="menu-manage-actions">
+                        <form method="POST"
+                              action="{% url 'final_project:toggle_menu_item' item.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline menu-manage-btn">
+                                {% if item.available %}Mark unavailable{% else %}Mark available{% endif %}
+                            </button>
+                        </form>
+
+                        <a href="{% url 'final_project:edit_menu_item' item.pk %}"
+                           class="btn btn-outline menu-manage-btn">Edit</a>
+
+                        <form method="POST"
+                              action="{% url 'final_project:delete_menu_item' item.pk %}"
+                              onsubmit="return confirm('Delete {{ item.name|escapejs }}?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger menu-manage-btn">Delete</button>
+                        </form>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endfor %}
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -13,6 +13,15 @@ app_name = 'final_project'
 urlpatterns = [
     path("", views.RestaurantListView.as_view(), name="index"),
     path("restaurants/", views.RestaurantListView.as_view(), name="show_all_restaurants"),
+    path("restaurants/manage/", views.ManageRestaurantsView.as_view(), name="manage_restaurants"),
+    path("restaurants/create/", views.CreateRestaurantView.as_view(), name="create_restaurant"),
+    path("restaurants/<int:pk>/edit/", views.EditRestaurantView.as_view(), name="edit_restaurant"),
+    path("restaurants/<int:pk>/delete/", views.DeleteRestaurantView.as_view(), name="delete_restaurant"),
+    path("restaurants/<int:pk>/menu/", views.ManageMenuView.as_view(), name="manage_menu"),
+    path("restaurants/<int:pk>/menu/add/", views.CreateMenuItemView.as_view(), name="create_menu_item"),
+    path("menu_items/<int:pk>/edit/", views.EditMenuItemView.as_view(), name="edit_menu_item"),
+    path("menu_items/<int:pk>/delete/", views.DeleteMenuItemView.as_view(), name="delete_menu_item"),
+    path("menu_items/<int:pk>/toggle/", views.ToggleMenuItemAvailabilityView.as_view(), name="toggle_menu_item"),
     path("restaurants/<int:pk>/", views.RestaurantDetailView.as_view(), name="show_restaurant"),
 
     path('cart/', views.ShowCartView.as_view(), name='show_cart'),
@@ -25,7 +34,9 @@ urlpatterns = [
     path('cart/order/confirmation/<int:pk>/', views.OrderConfirmationView.as_view(), name='order_confirmation'),
 
     path("orders/", views.ShowOrdersView.as_view(), name="show_orders"),
+    path("orders/manage/", views.ManageOrdersView.as_view(), name="manage_orders"),
     path("orders/<int:pk>/status/", views.OrderStatusView.as_view(), name="order_status"),
+    path("orders/<int:pk>/update_status/", views.UpdateOrderStatusView.as_view(), name="update_order_status"),
     path("restaurants/<int:pk>/review/", views.WriteReviewView.as_view(), name="write_review"),
     path("reviews/<int:pk>/edit/", views.EditReviewView.as_view(), name="edit_review"),
     path("reviews/<int:pk>/delete/", views.DeleteReviewView.as_view(), name="delete_review"),

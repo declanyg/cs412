@@ -1,0 +1,52 @@
+<!-- File: edit_menu_item_form.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Form to edit an existing menu item (owner-only). -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="restaurant-form-wrapper">
+
+    <a href="{% url 'final_project:manage_menu' menu_item.restaurant.pk %}" class="status-back">
+        ← Back to {{ menu_item.restaurant.name }} menu
+    </a>
+
+    <div class="restaurant-form-card">
+        <div class="restaurant-form-header">
+            <h2>Edit {{ menu_item.name }}</h2>
+            <p>Update this item's details, price, or availability.</p>
+        </div>
+
+        <form method="POST" class="restaurant-form">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="restaurant-form-field {% if field.name == 'available' %}menu-item-checkbox{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="review-error">{{ field.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="restaurant-form-actions">
+                <a href="{% url 'final_project:manage_menu' menu_item.restaurant.pk %}"
+                   class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn">Save changes</button>
+            </div>
+        </form>
+
+        <form method="POST"
+              action="{% url 'final_project:delete_menu_item' menu_item.pk %}"
+              class="restaurant-delete-form"
+              onsubmit="return confirm('Delete {{ menu_item.name|escapejs }}?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete item</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

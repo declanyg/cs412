@@ -1,0 +1,69 @@
+<!-- File: manage_restaurants.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Owner-only management dashboard for restaurants. -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="manage-header">
+    <div>
+        <h2>Manage Restaurants</h2>
+        <p class="manage-subtitle">Restaurants you own — edit details or remove a listing.</p>
+    </div>
+    <a href="{% url 'final_project:create_restaurant' %}" class="btn">+ New restaurant</a>
+</div>
+
+{% if not restaurants %}
+    <div class="manage-empty">
+        <h3>No restaurants yet</h3>
+        <p>You haven't added any restaurants. Create your first one to start accepting orders.</p>
+        <a href="{% url 'final_project:create_restaurant' %}" class="btn">Add a restaurant</a>
+    </div>
+
+{% else %}
+    <ul class="manage-list">
+        {% for restaurant in restaurants %}
+        <li class="manage-card">
+            <a href="{% url 'final_project:show_restaurant' restaurant.pk %}"
+               class="manage-card-main">
+                {% if restaurant.image %}
+                    <img src="{{ restaurant.image.url }}"
+                         alt="{{ restaurant.name }}"
+                         class="manage-card-img">
+                {% else %}
+                    <div class="manage-card-img manage-card-img-placeholder">No image</div>
+                {% endif %}
+
+                <div class="manage-card-body">
+                    <h3>{{ restaurant.name }}</h3>
+                    <span class="cart-cuisine">{{ restaurant.cuisine }}</span>
+                    <p class="manage-card-address">{{ restaurant.address }}</p>
+                    <div class="manage-card-meta">
+                        <span title="Average rating">
+                            ⭐ {% if restaurant.get_average_rating %}{{ restaurant.get_average_rating|floatformat:1 }}{% else %}—{% endif %}
+                        </span>
+                        <span>· {{ restaurant.get_num_reviews }} review{{ restaurant.get_num_reviews|pluralize }}</span>
+                        <span>· {{ restaurant.menu_items.count }} menu item{{ restaurant.menu_items.count|pluralize }}</span>
+                    </div>
+                </div>
+            </a>
+
+            <div class="manage-card-actions">
+                <a href="{% url 'final_project:manage_menu' restaurant.pk %}"
+                   class="btn">Menu</a>
+                <a href="{% url 'final_project:edit_restaurant' restaurant.pk %}"
+                   class="btn btn-outline">Edit</a>
+                <form method="POST"
+                      action="{% url 'final_project:delete_restaurant' restaurant.pk %}"
+                      onsubmit="return confirm('Delete {{ restaurant.name|escapejs }}? This will remove its menu and orders. This cannot be undone.');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}

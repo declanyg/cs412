@@ -10,24 +10,24 @@ Description: Base template for final_project app
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>More Eats</title>
+    <title>More Food</title>
     <link rel="stylesheet" href="{% static 'final_project/styles_grid.css' %}">
 </head>
 
 <body>
 <div class="grid-container">
 
-    <!-- ── HEADER ───────────────────────────────────────── -->
+    <!-- Header -->
     <header>
-        <h1>More<span> Food</span></h1>
+        <h1>More Food</h1>
         <p class="header-tagline">Get food delivered</p>
     </header>
 
-    <!-- ── SIDE NAV ─────────────────────────────────────── -->
+    <!-- Left Nav -->
     <div class="nav-wrapper">
         <nav>
             <ul>
-                <li><a href="{% url 'final_project:index' %}">🏠 Home</a></li>
+                <li><a href="{% url 'final_project:index' %}">Home</a></li>
 
                 {% if category_list %}
                     <li class="nav-section-label">Menu</li>
@@ -45,20 +45,24 @@ Description: Base template for final_project app
         </nav>
     </div>
 
-    <!-- ── MAIN CONTENT ─────────────────────────────────── -->
+    <!-- Main Content -->
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
-    <!-- ── ASIDE ────────────────────────────────────────── -->
+    <!-- Aside -->
     <div class="aside-wrapper">
         <aside>
             <nav>
                 {% if user.is_authenticated %}
                     <a href="{% url 'final_project:show_customer' %}" class="user-pill">
-                        <div class="user-avatar">{{ user.username|first|upper }}</div>
-                        {{ user.username }}
+                        {% if user.customer.first.image %}
+                            <img src="{{ user.customer.first.image.url }}" alt="{{ user.username }}" class="user-avatar">
+                        {% else %}
+                            <div class="user-avatar">{{ user.customer.first.last_name|first|upper }}</div>
+                        {% endif %}
+                        {{ user.customer.first.last_name }}, {{ user.customer.first.first_name }}
                     </a>
                 {% else %}
                     <a href="{% url 'final_project:login' %}" class="aside-link">Log in</a>
@@ -66,25 +70,34 @@ Description: Base template for final_project app
                 {% endif %}
 
                 <a href="{% url 'final_project:show_cart' %}" class="cart-btn">
-                    <span class="cart-icon">🛒</span> Cart
+                    Cart
                 </a>
                 
                 <a href="{% url 'final_project:show_orders' %}" class="orders-btn">
-                    <span class="cart-icon">📦</span> Orders
+                    Orders
                 </a>
 
                 {% if user.is_authenticated %}
+                    {% if user.customer.first.restaurant_owner %}
+                    <a href="{% url 'final_project:manage_restaurants' %}" class="manage-btn">
+                        Manage
+                    </a>
+                    
+                    <a href="{% url 'final_project:manage_orders' %}" class="manage-btn manage-btn-alt">
+                        Update orders
+                    </a>
+                    {% endif %}
                     <a href="{% url 'final_project:logout' %}" class="aside-link">Log out</a>
                 {% endif %}
             </nav>
         </aside>
     </div>
 
-    <!-- ── FOOTER ────────────────────────────────────────── -->
+    <!-- Footer -->
     <footer>
         <p>Page created by <a href="mailto:declanyg@bu.edu">declanyg@bu.edu</a></p>
     </footer>
 
-</div><!-- /.grid-container -->
+</div>
 </body>
 </html>

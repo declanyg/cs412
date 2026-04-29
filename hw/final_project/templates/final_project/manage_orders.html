@@ -1,0 +1,66 @@
+<!-- File: manage_orders.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Owner-only dashboard for updating order statuses across owned restaurants. -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="manage-orders-wrapper">
+
+    <div class="manage-header">
+        <div>
+            <h2>Update Orders</h2>
+            <p class="manage-subtitle">Change the status of orders placed at restaurants you own.</p>
+        </div>
+    </div>
+
+    {% if not orders %}
+        <div class="manage-empty">
+            <h3>No orders yet</h3>
+            <p>Once customers start placing orders at your restaurants, they'll appear here.</p>
+        </div>
+
+    {% else %}
+
+        <!-- Active Orders -->
+        <section class="orders-section">
+            <div class="orders-section-title">
+                <h3>Active</h3>
+                <span class="orders-section-count">{{ active_orders|length }}</span>
+            </div>
+
+            {% if active_orders %}
+                <ul class="manage-orders-list">
+                    {% for order in active_orders %}
+                        {% include 'final_project/_manage_order_card.html' with order=order status_choices=status_choices %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="orders-section-empty">Nothing in flight right now.</p>
+            {% endif %}
+        </section>
+
+        <!-- Completed/Cancelled Orders -->
+        <section class="orders-section">
+            <div class="orders-section-title">
+                <h3>Completed</h3>
+                <span class="orders-section-count">{{ completed_orders|length }}</span>
+            </div>
+
+            {% if completed_orders %}
+                <ul class="manage-orders-list">
+                    {% for order in completed_orders %}
+                        {% include 'final_project/_manage_order_card.html' with order=order status_choices=status_choices %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="orders-section-empty">No completed or cancelled orders yet.</p>
+            {% endif %}
+        </section>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

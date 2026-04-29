@@ -8,25 +8,75 @@ Description: Template to display all restaurants in final_project app  -->
 
 {% block content %}
 
+<form method="get" class="restaurant-search" role="search">
+    <div class="restaurant-search-row">
+        <div class="restaurant-search-field restaurant-search-grow">
+            <label for="restaurant-search-q" class="visually-hidden">Search</label>
+            <input type="search"
+                   id="restaurant-search-q"
+                   name="q"
+                   value="{{ query }}"
+                   placeholder="Search by name, cuisine, or address…">
+        </div>
+
+        <div class="restaurant-search-field">
+            <label for="restaurant-search-cuisine" class="visually-hidden">Cuisine</label>
+            <select id="restaurant-search-cuisine" name="cuisine">
+                <option value="">All cuisines</option>
+                {% for cuisine in cuisines %}
+                    <option value="{{ cuisine }}"
+                            {% if cuisine == selected_cuisine %}selected{% endif %}>
+                        {{ cuisine }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Search</button>
+        {% if has_filters %}
+            <a href="{% url 'final_project:show_all_restaurants' %}"
+               class="btn btn-outline">Clear</a>
+        {% endif %}
+    </div>
+
+    <p class="restaurant-search-summary">
+        {% if has_filters %}
+            {{ total_results }} result{{ total_results|pluralize }}
+            {% if query %}for "<strong>{{ query }}</strong>"{% endif %}
+            {% if selected_cuisine %}in <strong>{{ selected_cuisine }}</strong>{% endif %}
+        {% else %}
+            Showing all {{ total_results }} restaurant{{ total_results|pluralize }}
+        {% endif %}
+    </p>
+</form>
+
 <ul class="restaurant-list">
   {% for restaurant in restaurants %}
     <a href="{% url 'final_project:show_restaurant' restaurant.id %}">
       <li class="restaurant-item">
-      <img
-          src="{{ restaurant.image.url }}"
-          alt="{{ restaurant.name }}"
-          class="restaurant-img"
-          draggable="false"
-      >
+      {% if restaurant.image %}
+        <img
+            src="{{ restaurant.image.url }}"
+            alt="{{ restaurant.name }}"
+            class="restaurant-img"
+            draggable="false"
+        >
+      {% endif %}
 
       <div class="restaurant-text">
         <strong>{{ restaurant.name }}</strong>
+        <span class="cart-cuisine">{{ restaurant.cuisine }}</span>
         <span class="address">{{ restaurant.address }}</span>
       </div>
     </li>
     </a>
   {% empty %}
-    <li>No restaurants found.</li>
+    <li class="restaurant-empty">
+        No restaurants matched your search.
+        {% if has_filters %}
+            <a href="{% url 'final_project:show_all_restaurants' %}">Clear filters</a> to see all restaurants.
+        {% endif %}
+    </li>
   {% endfor %}
 </ul>
 

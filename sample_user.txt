@@ -1,0 +1,7 @@
+Customer:
+    Username: test
+    Password: 4321asdf
+
+Owner:
+    Username: meep
+    Password: test4321

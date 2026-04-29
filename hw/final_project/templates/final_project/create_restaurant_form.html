@@ -1,0 +1,44 @@
+<!-- File: create_restaurant_form.html
+Author: Declan Young (declanyg@bu.edu), 27/04/2026
+Description: Form to create a new restaurant. -->
+
+{% extends 'final_project/base.html' %}
+
+{% block content %}
+
+<div class="restaurant-form-wrapper">
+
+    <a href="{% url 'final_project:manage_restaurants' %}" class="status-back">← Back to manage</a>
+
+    <div class="restaurant-form-card">
+        <div class="restaurant-form-header">
+            <h2>New Restaurant</h2>
+            <p>Fill in the details below. You can always edit them later.</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="restaurant-form">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="restaurant-form-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small>{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <p class="review-error">{{ field.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="restaurant-form-actions">
+                <a href="{% url 'final_project:manage_restaurants' %}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn">Create restaurant</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
