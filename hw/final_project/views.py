@@ -10,6 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.urls import reverse
+from django.db.models import Q
+from urllib.parse import urlparse
 
 
 class ProfileLoginRequiredMixin(LoginRequiredMixin):
@@ -39,7 +41,6 @@ class RestaurantListView(ListView):
 
         query = (self.request.GET.get('q') or '').strip()
         if query:
-            from django.db.models import Q
             qs = qs.filter(
                 Q(name__icontains=query)
                 | Q(cuisine__icontains=query)
@@ -449,18 +450,27 @@ class DeleteReviewView(ProfileLoginRequiredMixin, View):
     """Handles POST requests to delete one of the logged-in customer's Reviews."""
 
     def post(self, request, *args, **kwargs):
-        """Delete the specified Review after verifying ownership.
+        """Delete the specified Review
         """
         review = get_object_or_404(
             Review,
             pk=self.kwargs['pk'],
             customer=self.get_customer(),
         )
+        pk = review.pk
         review.delete()
-        return redirect(
-            request.META.get('HTTP_REFERER')
-            or reverse('final_project:show_customer')
-        )
+
+        deleted_paths = {
+            reverse('final_project:edit_review', kwargs={'pk': pk}),
+            reverse('final_project:delete_review', kwargs={'pk': pk}),
+        }
+
+        referer = request.META.get('HTTP_REFERER') or ''
+        referer_path = urlparse(referer).path
+
+        if not referer or referer_path in deleted_paths:
+            return redirect('final_project:show_customer')
+        return redirect(referer)
 
 
 class ManageRestaurantsView(ProfileLoginRequiredMixin, ListView):
