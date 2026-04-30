@@ -19,7 +19,7 @@ Description: Template to login to final_project app  -->
     <input
         type="hidden"
         name="next"
-        value="{{ next|default:'/final_project/' }}"
+        value="{% url 'final_project:show_all_restaurants' %}"
     >
 </form>
 
